@@ -1,0 +1,1 @@
+docker compose -f docker-compose.yml -p visual-ai-agent-designer up -d --build --remove-orphans
