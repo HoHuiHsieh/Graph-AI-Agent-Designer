@@ -49,19 +49,19 @@ export default function NodeHandle(props: NodeHandleProps): React.ReactNode {
     const title = () => {
         switch (datatype) {
             case "system":
-                return "系統提示"
+                return "system prompt"
 
             case "instruction":
-                return "說明資訊"
+                return "instructions"
 
             case "prompt":
-                return "使用者提示"
+                return "user prompt"
 
             case "assistant":
-                return "AI助理回覆"
+                return "bot response"
 
             case "function":
-                return "功能呼叫"
+                return "call function"
 
             default:
                 return "";
