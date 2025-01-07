@@ -14,17 +14,16 @@ RUN apt update \
 RUN npm i -g next nodemon ts-node
 
 
-# FROM graph-ai-agent-designer/server:dev AS deploy-container
 FROM base-container AS deploy-container
 ENV HOME=/root/ai-agent
 # build backend
 COPY ./backend $HOME/backend
 WORKDIR $HOME/backend
-RUN npm run build
+RUN npm install && npm run build
 # build frontend
 COPY ./frontend $HOME/frontend
 WORKDIR $HOME/frontend
-RUN npm run build
+RUN npm install && npm run build
 # serve project
 CMD (cd $HOME/backend && npm start) & \
     (cd $HOME/frontend && npm start)
