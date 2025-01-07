@@ -1,13 +1,13 @@
 /**
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
-import { AccountTreeOutlined, ChatOutlined, Code } from "@mui/icons-material";
+import { FaceRetouchingNatural, Home } from "@mui/icons-material";
 
 
 export const SIDEBAR_MENU = [
     {
-        label: "Designer",
+        label: "Agent Designer",
         href: "/web",
-        icon: <AccountTreeOutlined fontSize="large" />
+        icon: <FaceRetouchingNatural fontSize="large" />
     },
 ]

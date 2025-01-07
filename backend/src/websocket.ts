@@ -1,6 +1,6 @@
 /**
  * add MyWebSockerServer class for handling WebSocket connections
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import { Server as SocketServer } from "socket.io";
 

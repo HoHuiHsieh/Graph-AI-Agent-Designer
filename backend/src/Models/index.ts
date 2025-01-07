@@ -1,8 +1,11 @@
 /**
- * @author HoHui Hsieh
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
-import { routeInferLLMChat, routeInferLLMCode, model_list } from "../API";
-import { LLMInferenceProps } from "../API/typedef";
+import { modelList } from "../API";
+import { ChatCompletion, ToolUse } from "./ChatCompletion";
+import { Embedding } from "./Embedding";
+import { ASR } from "./ASR";
+import { TTS } from "./TTS";
 
 
 /**
@@ -10,26 +13,13 @@ import { LLMInferenceProps } from "../API/typedef";
  * @returns 
  */
 export function getModels() {
-    return model_list
+    return modelList
 }
 
-/**
- * 
- * @param props 
- * @returns 
- */
-export async function chatCompletion(props: LLMInferenceProps): Promise<string> {
-    return await routeInferLLMChat(props);
+export {
+    ChatCompletion,
+    ToolUse,
+    Embedding,
+    ASR,
+    TTS,
 }
-
-/**
- * 
- * @param props 
- * @returns 
- */
-export async function codeCompletion(props: LLMInferenceProps): Promise<string> {
-    return await routeInferLLMCode(props)
-}
-
-
-export { LLMInferenceProps }

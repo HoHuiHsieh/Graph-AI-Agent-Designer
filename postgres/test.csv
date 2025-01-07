@@ -1,0 +1,3 @@
+id,order_id,material_cost,labor_cost,module1-material_cost,module1-labor_cost,other-material_cost,other-labor_cost
+1110001,M000000001,100,50,20,20,80,30
+1110002,M000000002,120,80,50,40,70,40

@@ -1,9 +1,9 @@
 /**
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import * as React from "react";
-import WorkFlow from "@/components/WorkFlow";
 import { Box } from "@mui/material";
+import WorkFlow from "@/components/Workflow";
 
 
 /**
@@ -21,7 +21,7 @@ export default function Home() {
                 width: "100%"
             }}
         >
-            <title>Graph AI-Agent Designer</title>
+            <title>Graph Agentic AI Designer</title>
             <WorkFlow />
         </Box>
     );

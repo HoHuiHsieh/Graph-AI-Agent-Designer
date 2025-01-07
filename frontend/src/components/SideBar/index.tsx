@@ -1,24 +1,19 @@
 "use client";
 /**
  * sidebar component with drawer functionality
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import * as React from "react";
 import { CSSObject, styled, Theme } from "@mui/material/styles";
-import MuiDrawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import { Drawer as MuiDrawer, List, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
+import { ChevronLeft, ChevronRight, Logout } from "@mui/icons-material";
 import { SIDEBAR_MENU } from "./constent";
-import { Tooltip, Typography } from "@mui/material";
+
+
+const version = "1.1.0";
 
 // maximum drawer width
-const maxDrawerWidth = 180;
+const maxDrawerWidth = 250;
 
 // opened drawer style
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -84,14 +79,12 @@ export default function SideBar() {
         if (state == false) return true;
         else return false;
     })
-
     return (
         <Drawer
             variant="permanent"
             open={open}
         >
             <DrawerHeader>
-                {/* Logo */}
                 <IconButton
                     size="large"
                     onClick={handleDrawer}
@@ -103,25 +96,52 @@ export default function SideBar() {
                 </IconButton>
             </DrawerHeader>
             <Divider />
-            <List>
+            <List style={{ height: "81vh" }} >
                 {SIDEBAR_MENU.map((item, index) => (
                     <ListItem key={index} disablePadding>
-                        <Tooltip title={item.label} placement="right-end" >
+                        <Tooltip
+                            title={<Typography variant="h5">{item.label}</Typography>}
+                            placement="right-end"
+                        >
                             <ListItemButton href={item.href} >
                                 <ListItemIcon>
                                     {item.icon}
                                 </ListItemIcon>
-                                <ListItemText
-                                    primary={
-                                        <Typography variant="h4" >
+                                {open &&
+                                    <ListItemText primary={
+                                        <Typography variant="h4" align="left" >
                                             {item.label}
                                         </Typography>
-                                    }
-                                />
+                                    } />
+                                }
                             </ListItemButton>
                         </Tooltip>
                     </ListItem>
                 ))}
+            </List>
+            <List style={{ height: "10vh" }} >
+                <ListItem disablePadding >
+                    <Tooltip
+                        title={<Typography variant="h5">Logout</Typography>}
+                        placement="right-end"
+                    >
+                        <ListItemButton href="/web" >
+                            <ListItemIcon>
+                                <Logout fontSize="large" />
+                            </ListItemIcon>
+                            <ListItemText primary={
+                                <Typography variant="h4" align="left" >
+                                    Logout
+                                </Typography>
+                            } />
+                        </ListItemButton>
+                    </Tooltip>
+                </ListItem>
+                <ListItemText primary={
+                    <Typography variant="h5" color="info" align="center" >
+                        ver.{version}
+                    </Typography>
+                } />
             </List>
         </Drawer>
     );

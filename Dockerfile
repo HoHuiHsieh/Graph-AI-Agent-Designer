@@ -6,20 +6,25 @@ RUN apt update \
                     python3-requests \
                     python3-tz \
                     python3-bs4 \
-                    python3-redis -y \
+                    python3-redis \
+                    python3-pandas \
+                    python3-numpy \
+                    python3-tz -y \
     && apt clean
+RUN npm i -g next nodemon ts-node
 
 
+# FROM graph-ai-agent-designer/server:dev AS deploy-container
 FROM base-container AS deploy-container
 ENV HOME=/root/ai-agent
 # build backend
 COPY ./backend $HOME/backend
 WORKDIR $HOME/backend
-RUN npm install && npm run build
+RUN npm run build
 # build frontend
 COPY ./frontend $HOME/frontend
 WORKDIR $HOME/frontend
-RUN npm install && npm run build
+RUN npm run build
 # serve project
 CMD (cd $HOME/backend && npm start) & \
     (cd $HOME/frontend && npm start)

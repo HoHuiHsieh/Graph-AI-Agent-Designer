@@ -1,12 +1,7 @@
 /**
- * @author HoHui Hsieh
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import { spawn } from "child_process";
-import { readdirSync } from "fs";
-
-
-
-const poetryPath = "/root/ai-agent/agent-poetry";
 
 
 /**
@@ -14,9 +9,6 @@ const poetryPath = "/root/ai-agent/agent-poetry";
  * @returns 
  */
 export async function getEnvs() {
-    // let files = readdirSync(poetryPath, { withFileTypes: true });
-    // let folders = files.filter(e => e.isDirectory());
-    // return folders.map(e => e.name)
     return ["default"]
 }
 
@@ -29,9 +21,6 @@ export async function getEnvs() {
 export async function runPython(props: { env: string, code: string }): Promise<string> {
     return new Promise((resolve, reject) => {
         // child process for code
-        // const ls = spawn("poetry", ["run", "python3", "-c", props.code], {
-        //     cwd: `${poetryPath}/${props.env || "default"}`
-        // });
         const ls = spawn("python3", ["-c", props.code], {});
 
         // set timeout

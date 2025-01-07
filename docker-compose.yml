@@ -1,4 +1,4 @@
-version: '3'
+# version: '3'
 services:
   nginx:
     image: nginx:stable
@@ -17,24 +17,58 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 3001:3001
+    restart: always
+    
+  postgres:
+    build: ./postgres
+    image: graph-ai-agent-designer/postgresdb:1.0.0
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: my-password
+      POSTGRES_DB: postgres
+    networks:
+      - private
+    expose:
+      - 5432
     restart: always
 
   server:
     build:
       context: .
       target: deploy-container
-    image: visual-ai-agent-designer/server:1.0.0
+    image: graph-ai-agent-designer/server:1.1.0
     expose:
       - 3000
       - 3001
     environment:
       - TZ=Asia/Taipei
-      - TWCC_API_URL=https://api-ams.twcc.ai/api
-      - TWCC_API_KEY=xxxxxx-xxxxxx-xxxxxx
+      - OPENAI_API_KEY=<your-openai-api-key>
     networks:
       - public
       - private
-
+      
+  develop:
+    build:
+      context: .
+      target: base-container
+    image: graph-ai-agent-designer/server:dev
+    expose:
+      - 3000
+      - 3001
+    environment:
+      - TZ=Asia/Taipei
+      - OPENAI_API_KEY=<your-openai-api-key>
+    networks:
+      - public
+      - private
+    volumes:
+      - .:/root/ai-agent
+    working_dir: /root/ai-agent
+    command: bash
+    stdin_open: true
+    tty: true
 
 networks:
   public:

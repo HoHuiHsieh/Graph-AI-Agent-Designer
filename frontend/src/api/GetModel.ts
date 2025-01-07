@@ -1,78 +1,59 @@
 /**
- * add GetModel class with chatCompletion and codeCompletion methods
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * 
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
-import HttpBase from "./HttpBase";
+import { instance } from "./base";
 
-
-type Option = {
-    label: string,
-    value: string,
-    ref: string,
-}
-
-export interface ModelList {
-    chat: Option[],
-    function_call: Option[],
-    code_completion: Option[],
+/** */
+export interface Option { label: string, value: string, ref: string };
+export interface ChatOption extends Option { properties: string[] }
+export interface TTSOption extends Option { voice: string };
+interface ModelList {
+    chat_completion: ChatOption[],
+    tool_use: ChatOption[],
     embedding: Option[],
-}
-
-interface Parameters {
-    max_new_tokens: number,
-    frequence_penalty: number,
-    temperature: number,
-    top_k: number,
-    top_p: number,
+    asr: Option[],
+    tts: TTSOption[],
 }
 
 /**
- * class with chatCompletion and codeCompletion methods
+ * 
+ * @returns 
  */
-export default class GetModel extends HttpBase {
+export async function getModels(): Promise<ModelList> {
+    const { data } = await instance.get("/model")
+    return data
+}
 
-    path: string = "/app/model"
+/** */
+interface TTSProps {
+    model: string,
+    input: string,
+    voice?: string,
+}
 
-    /**
-     * 
-     * @param key 
-     * @param path 
-     */
-    constructor(key?: string, path?: string) {
-        super(key, path);
-    }
+/**
+ * 
+ * @param props 
+ * @returns 
+ */
+export async function tts(props: TTSProps): Promise<string> {
+    const { data } = await instance.post("/model/tts", props)
+    return data
+}
 
-    /**
-     * get model info
-     * @returns 
-     */
-    async get(): Promise<ModelList> {
-        const { data } = await this.instance.get(this.path)
-        return data
-    }
-
-    /**
-     * handle chat completion request
-     * @param model 
-     * @param messages 
-     * @param parameters 
-     * @returns 
-     */
-    async chatCompletion(model: string, messages: { role: "system" | "user" | "assistant", content: string }[], parameters: Parameters): Promise<string> {
-        const { data } = await this.instance.post(`${this.path}/chatCompletion`, { model, messages, parameters })
-        return data
-    }
-
-    /**
-     * handle code completion request
-     * @param model 
-     * @param messages 
-     * @param parameters 
-     * @returns 
-     */
-    async codeCompletion(model: string, messages: { role: "system" | "user" | "assistant", content: string }[], parameters: Parameters): Promise<string> {
-        const { data } = await this.instance.post(`${this.path}/codeCompletion`, { model, messages, parameters })
-        return data
-    }
-
+/**
+ * 
+ * @param model 
+ * @param file 
+ * @returns 
+ */
+export async function asr(model: string, file: File): Promise<string> {
+    let body = new FormData();
+    body.append("file", file);
+    body.append("model", model);
+    const { data } = await this.instance.post("/model/asr", body, {
+        headers: { "Content-Type": "multipart/form-data" }
+    });
+    return data
 }

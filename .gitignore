@@ -1,1 +1,8 @@
+.cache
+.gnupg
+.npm
+.ssh
+.vscode-server
 volume
+release
+docker-compose.yml

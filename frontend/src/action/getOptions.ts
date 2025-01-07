@@ -1,26 +1,33 @@
 /**
  * get model list and python runner info.
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
-import GetModel from "@/api/GetModel";
-import GetPython from "@/api/GetPython";
-import { ModelList } from "@/api/GetModel";
+import { getModels, Option, ChatOption, TTSOption } from "@/api/GetModel";
+import {getPythonEnvs} from "@/api/GetPython";
 
 
-export interface OptionsData {
-    models: ModelList,
-    envs: string[]
+interface OptionData {
+    python_env: string[],
+    chat_model: ChatOption[],
+    tool_model: ChatOption[],
+    embd_model: Option[],
+    asr_model: Option[],
+    tts_model: TTSOption[],
 }
-
-const getModel = new GetModel();
-const getPython = new GetPython();
 
 /**
  * get model list and python runner info.
  * @returns 
  */
-export async function getOptions(): Promise<OptionsData> {
-    const models = await getModel.get();
-    const envs = await getPython.get();
-    return { models, envs }
+export async function getOptions(): Promise<OptionData> {
+    const models = await getModels();
+    const envs = await getPythonEnvs();
+    return {
+        python_env: envs,
+        chat_model: models.chat_completion,
+        tool_model: models.tool_use,
+        embd_model: models.embedding,
+        asr_model: models.asr,
+        tts_model: models.tts,
+    }
 }

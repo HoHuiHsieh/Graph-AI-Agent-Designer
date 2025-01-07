@@ -1,6 +1,6 @@
 /**
  * Add MyRestServer class with CORS setup and middleware configurations.
-  * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import express, { Express, Router } from "express";
 import cors from "cors";

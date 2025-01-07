@@ -1,1 +1,0 @@
-docker compose -f docker-compose.dev.yml -p develop-project up -d --build --remove-orphans
