@@ -5,17 +5,28 @@
 			"type": "agent",
 			"data": {
 				"type": "react-agent",
-				"name": "ReActAgent",
+				"name": "MyAiAgent",
 				"handoffs": {
 					"items": [
 						{
-							"name": "Subflow",
+							"name": "__END__",
+							"express": ""
+						},
+						{
+							"name": "getDateTime",
+							"express": ""
+						},
+						{
+							"name": "getLocation",
 							"express": ""
 						}
-					]
+					],
+					"useAi": true,
+					"credName": "OpenAI Credential ",
+					"model": "gpt-4o-mini"
 				},
-				"memory": false,
-				"systemPrompt": "You are an useful AI agent.",
+				"memory": true,
+				"systemPrompt": "You are a helpful and intelligent AI agent that follows a structured workflow to provide accurate, relevant, and context-aware responses.\n\nWhenever the user asks a question or gives a task, follow this workflow strictly:\n\n1. **Step-by-Step Analysis**  \n   Carefully analyze the user’s input step-by-step to determine the intent and identify the specific information or clarification needed to generate a high-quality response.\n\n2. **Information Gathering**  \n   If necessary, use any available tools (e.g., web search, code execution, image processing, etc.) to retrieve, compute, or infer missing or supplementary information.\n\n3. **Sub-flow Selection (Optional)**  \n   If the user has defined sub-flows or mini-processes, choose the most relevant one based on your analysis. Explain briefly why it was selected. Skip this step if no sub-flows are defined or needed.\n\n4. **Final Response**  \n   Generate a direct and helpful answer based on the available information and tools. Ensure the response is concise, logically structured, and aligned with the user’s goals.\n\nGeneral guidelines:\n- Prioritize clarity, correctness, and relevance.\n- Ask follow-up questions if clarification is required.\n- Avoid assumptions beyond the provided context unless necessary for reasoning.\n- Be transparent about any limitations or uncertainties in your response.\n",
 				"userPrompt": "{{ $json.Chat.input }}"
 			},
 			"position": {
@@ -40,7 +51,7 @@
 				"x": 585,
 				"y": 480
 			},
-			"selected": false,
+			"selected": true,
 			"dragging": false
 		},
 		{
@@ -129,14 +140,14 @@
 			"type": "flowpoint",
 			"data": {
 				"type": "end",
-				"name": "ChatEnd",
+				"name": "__END__",
 				"handoffs": {
 					"items": []
 				}
 			},
 			"position": {
-				"x": 840,
-				"y": 480
+				"x": 750,
+				"y": 570
 			},
 			"style": {
 				"background": "#FFF",
@@ -154,8 +165,8 @@
 			"height": 50,
 			"selected": false,
 			"positionAbsolute": {
-				"x": 840,
-				"y": 480
+				"x": 750,
+				"y": 570
 			},
 			"dragging": false
 		},
@@ -164,11 +175,11 @@
 			"type": "default",
 			"data": {
 				"type": "subflow",
-				"name": "Subflow",
+				"name": "getDateTime",
 				"handoffs": {
 					"items": [
 						{
-							"name": "ChatEnd",
+							"name": "MyAiAgent",
 							"express": ""
 						}
 					]
@@ -193,7 +204,7 @@
 			},
 			"width": 50,
 			"height": 50,
-			"selected": true,
+			"selected": false,
 			"positionAbsolute": {
 				"x": 750,
 				"y": 480
@@ -205,7 +216,7 @@
 			"type": "flowpoint",
 			"data": {
 				"type": "start",
-				"name": "__START__",
+				"name": "__SUBFLOW_START__",
 				"handoffs": {
 					"items": [
 						{
@@ -216,8 +227,8 @@
 				}
 			},
 			"position": {
-				"x": 495,
-				"y": 705
+				"x": 510,
+				"y": 675
 			},
 			"style": {
 				"background": "#FFF",
@@ -234,8 +245,8 @@
 			"width": 60,
 			"height": 50,
 			"positionAbsolute": {
-				"x": 495,
-				"y": 705
+				"x": 510,
+				"y": 675
 			},
 			"selected": false,
 			"dragging": false
@@ -245,7 +256,7 @@
 			"type": "flowpoint",
 			"data": {
 				"type": "end",
-				"name": "__END__",
+				"name": "__SUBFLOW_END__",
 				"handoffs": {
 					"items": [],
 					"useAi": false,
@@ -283,7 +294,7 @@
 			"type": "default",
 			"data": {
 				"type": "postgresql",
-				"name": "PostgreSQL",
+				"name": "DatabaseTime",
 				"handoffs": {
 					"items": [
 						{
@@ -297,7 +308,7 @@
 			},
 			"position": {
 				"x": 630,
-				"y": 705
+				"y": 690
 			},
 			"style": {
 				"background": "#FFF",
@@ -316,7 +327,48 @@
 			"selected": false,
 			"positionAbsolute": {
 				"x": 630,
-				"y": 705
+				"y": 690
+			},
+			"dragging": false
+		},
+		{
+			"id": "default-javascript-6d14a281e1424c84b940c12fd4e93aa0",
+			"type": "default",
+			"data": {
+				"type": "javascript",
+				"name": "getLocation",
+				"handoffs": {
+					"items": [
+						{
+							"name": "MyAiAgent",
+							"express": ""
+						}
+					]
+				},
+				"code": "return \"Current location is Taipei Taiwan\""
+			},
+			"position": {
+				"x": 750,
+				"y": 375
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 750,
+				"y": 375
 			},
 			"dragging": false
 		}
@@ -347,14 +399,6 @@
 			"id": "reactflow__edge-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow-default-subflow-70968504771047e9ba174af6ce66ab70flow"
 		},
 		{
-			"source": "default-subflow-70968504771047e9ba174af6ce66ab70",
-			"sourceHandle": "flow",
-			"target": "flowpoint-end-8f1937bafee243a79e09d74952eeedc7",
-			"targetHandle": "flow",
-			"type": "flow",
-			"id": "reactflow__edge-default-subflow-70968504771047e9ba174af6ce66ab70flow-flowpoint-end-8f1937bafee243a79e09d74952eeedc7flow"
-		},
-		{
 			"source": "flowpoint-start-2f2241eda535440080aadca9229324be",
 			"sourceHandle": "flow",
 			"target": "default-postgresql-868b67b8221f44f886e01b5e28f891e7",
@@ -369,6 +413,38 @@
 			"targetHandle": "flow",
 			"type": "flow",
 			"id": "reactflow__edge-default-postgresql-868b67b8221f44f886e01b5e28f891e7flow-flowpoint-end-7690ee75706342b48a4fb136cd3f01ffflow"
+		},
+		{
+			"source": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"sourceHandle": "flow",
+			"target": "flowpoint-end-8f1937bafee243a79e09d74952eeedc7",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow-flowpoint-end-8f1937bafee243a79e09d74952eeedc7flow"
+		},
+		{
+			"source": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"sourceHandle": "flow",
+			"target": "default-javascript-6d14a281e1424c84b940c12fd4e93aa0",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow-default-javascript-6d14a281e1424c84b940c12fd4e93aa0flow"
+		},
+		{
+			"source": "default-javascript-6d14a281e1424c84b940c12fd4e93aa0",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-default-javascript-6d14a281e1424c84b940c12fd4e93aa0flow-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow"
+		},
+		{
+			"source": "default-subflow-70968504771047e9ba174af6ce66ab70",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-default-subflow-70968504771047e9ba174af6ce66ab70flow-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow"
 		}
 	],
 	"credentials": {
@@ -382,10 +458,10 @@
 		"postgresql": [
 			{
 				"credName": "PostgreSQL Credential",
-				"host": "0.0.0.0",
+				"host": "your-postgresql-host",
 				"port": 5432,
 				"database": "postgres",
-				"user": "root",
+				"user": "your-username",
 				"password": "your-secret-password"
 			}
 		]

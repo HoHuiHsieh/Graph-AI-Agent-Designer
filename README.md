@@ -20,6 +20,15 @@ The application integrates three core modules:
 - Some development ideas and inspirations for this project are derived from [n8n](https://github.com/n8n-io/n8n), an open-source workflow automation tool.
 - This project is currently under active development. Debugging and testing are ongoing to ensure stability and functionality.
 
+## Example Images
+Here are some example images showcasing the application's interface and features:
+
+1. **Graph Editor Interface:**
+   ![Graph Editor](./assets/images/image01.png)
+
+2. **ChatRoom:**
+   ![Workflow Visualization](./assets/images/image02.png)
+
 ## Installation
 **Prerequisite:** This project requires a Linux (Ubuntu) environment.
 

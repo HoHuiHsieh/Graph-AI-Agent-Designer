@@ -10,9 +10,9 @@ const theme = createTheme({
             contrastText: "#ffffff", // Ensure text contrast
         },
         secondary: {
-            light: "#ff616f", // Light shade of secondary color
-            main: "#dc004e", // Main secondary color
-            dark: "#9a0036", // Dark shade of secondary color
+            light: "#a5d6a7", // Light shade of secondary color (light green)
+            main: "#66bb6a", // Main secondary color (light green)
+            dark: "#338a3e", // Dark shade of secondary color (light green)
             contrastText: "#ffffff", // Ensure text contrast
         },
         background: {

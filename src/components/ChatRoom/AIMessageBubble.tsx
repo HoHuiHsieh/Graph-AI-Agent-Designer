@@ -48,7 +48,7 @@ export default function AIMessageBubble({ content, completion_tokens }: AIMessag
                 >
                     <Typography
                         variant="body1"
-                        color={theme.palette.secondary.contrastText}
+                        // color={theme.palette.secondary.contrastText}
                         component="span"
                         fontSize={28}
                     >
@@ -58,7 +58,7 @@ export default function AIMessageBubble({ content, completion_tokens }: AIMessag
                     </Typography>
                     <Typography
                         variant="caption"
-                        color={theme.palette.secondary.contrastText}
+                        // color={theme.palette.secondary.contrastText}
                         sx={{
                             fontSize: "0.75rem",
                             fontStyle: "italic",
