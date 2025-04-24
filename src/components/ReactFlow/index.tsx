@@ -26,7 +26,7 @@ import { updateHandoffs } from "./compoments/utils";
 
 /**
  * Workflow editor component
- * @returns {React.ReactNode} The ViewPort component
+ * @returns The ViewPort component
  */
 export default function ViewPort(): React.ReactNode {
     const theme = useTheme();
@@ -107,7 +107,7 @@ export default function ViewPort(): React.ReactNode {
 
 /**
  * Play button component
- * @returns {React.ReactNode} The PlayButton component
+ * @returns The PlayButton component
  */
 function PlayButton(): React.ReactNode {
     const { setOpenChatRoom } = usePanel();

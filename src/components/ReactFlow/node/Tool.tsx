@@ -19,8 +19,8 @@ import { toolHandleStyle, iconButtonStyle, labelStyle } from "./style";
 /**
  * ToolNode component
  * 
- * @param {DefaultNodePropsType} props - Props for the ToolNode component
- * @returns {React.ReactNode} React component for the ToolNode
+ * @param props - Props for the ToolNode component
+ * @returns React component for the ToolNode
  */
 export default function ToolNode(props: DefaultNodePropsType): React.ReactNode {
     const { setOpenPanel } = usePanel();

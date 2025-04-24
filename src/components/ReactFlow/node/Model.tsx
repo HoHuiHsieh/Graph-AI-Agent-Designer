@@ -19,8 +19,8 @@ import { iconButtonStyle, labelStyle, modelHandleStyle } from "./style";
 /**
  * ModelNode component
  * 
- * @param {DefaultNodePropsType} props - Props for the ModelNode component
- * @returns {React.ReactNode} React component for the ModelNode
+ * @param props - Props for the ModelNode component
+ * @returns React component for the ModelNode
  */
 export default function ModelNode(props: DefaultNodePropsType): React.ReactNode {
     const { setOpenPanel } = usePanel();

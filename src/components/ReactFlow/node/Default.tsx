@@ -18,8 +18,8 @@ import { targetHandleStyle, sourceHandleStyle, iconButtonStyle, labelStyle } fro
 /**
  * DefaultNode component
  * 
- * @param {DefaultNodePropsType} props - The properties for the node, including type and data.
- * @returns {React.ReactNode} A React component representing the node.
+ * @param props - The properties for the node, including type and data.
+ * @returns A React component representing the node.
  */
 export default function DefaultNode(props: DefaultNodePropsType): React.ReactNode {
     const { setOpenPanel } = usePanel();

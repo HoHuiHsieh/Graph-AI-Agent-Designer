@@ -17,9 +17,9 @@ interface BaseHandleProps extends HandleProps {
  * BaseHandle component provides a customized React Flow handle with built-in
  * connection validation based on handle types and maximum connections.
  * 
- * @param {BaseHandleProps} props - The component props
- * @param {number} props.maxConnections - Maximum number of connections allowed for this handle
- * @returns {React.ReactNode} - A React Flow Handle component with validation
+ * @param props - The component props
+ * @param props.maxConnections - Maximum number of connections allowed for this handle
+ * @returns - A React Flow Handle component with validation
  */
 export function BaseHandle({ maxConnections, ...props }: BaseHandleProps): React.ReactNode {
     const { getNode, getEdges } = useReactFlow();

@@ -32,9 +32,9 @@ export default function JsonEditor({ label, value = {}, onChange }: JsonEditorPr
 
     /**
      * Handles changes to a specific key-value pair.
-     * @param {number} index - The index of the item being changed.
-     * @param {string} key - The new key.
-     * @param {string} value - The new value.
+     * @param index - The index of the item being changed.
+     * @param key - The new key.
+     * @param value - The new value.
      */
     const handleChange = (index: number, key: string, value: string) => {
         const newItems = [...items];
@@ -63,7 +63,7 @@ export default function JsonEditor({ label, value = {}, onChange }: JsonEditorPr
 
     /**
      * Removes a key-value pair at the specified index.
-     * @param {number} index - The index of the item to remove.
+     * @param index - The index of the item to remove.
      */
     const handleRemove = (index: number) => {
         const newItems = items.filter((_, i) => i !== index);

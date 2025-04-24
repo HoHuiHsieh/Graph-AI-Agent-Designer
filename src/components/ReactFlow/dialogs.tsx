@@ -13,7 +13,7 @@ import { DATA_TYPES, NODE_TYPES } from "../../types/nodes";
 
 /**
  * Render the appropriate panel based on the openPanel state.
- * @returns {React.ReactNode}
+ * @returns 
  */
 export function WorkplaceDialog(): React.ReactNode {
     const { openPanel } = usePanel();
@@ -42,7 +42,7 @@ export function WorkplaceDialog(): React.ReactNode {
 
 /**
  * Render the chat room dialog.
- * @returns {React.ReactNode}
+ * @returns 
  */
 export function ChatRoomDialog(): ReactNode {
     const { openChatRoom, setOpenChatRoom } = usePanel();

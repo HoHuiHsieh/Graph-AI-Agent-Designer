@@ -1,7 +1,7 @@
 /**
- * @fileoverview This file defines the types for the nodes and edges used in the LangGraph class.
+ * @fileoverview This file defines types for nodes used in the application,
  * 
- * @author @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import { OpenAIModelPropsType } from "./api";
 

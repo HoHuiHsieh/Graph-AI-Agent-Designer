@@ -20,8 +20,8 @@ import { getItem } from "../compoments";
 /**
  * FlowPointNode component renders a node with optional handles and a label.
  * 
- * @param {DefaultNodePropsType} props - The properties for the node.
- * @returns {React.ReactNode} The rendered node component.
+ * @param props - The properties for the node.
+ * @returns The rendered node component.
  */
 export default function FlowPointNode(props: DefaultNodePropsType): React.ReactNode {
     const { id, data } = props;

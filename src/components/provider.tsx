@@ -29,7 +29,7 @@ const PanelStore = createContext<PanelStoreType>(initState);
 
 /**
  * Custom hook to access the panel context.
- * @returns {PanelStoreType} The context value.
+ * @returns The context value.
  * @throws Will throw an error if used outside of the Provider.
  */
 export function usePanel(): PanelStoreType {
@@ -42,8 +42,8 @@ export function usePanel(): PanelStoreType {
 
 /**
  * Context provider for managing panel state.
- * @param {any} props - The props to pass to the provider.
- * @returns {React.ReactNode} The provider component.
+ * @param props - The props to pass to the provider.
+ * @returns The provider component.
  */
 export function PanelProvider(props: any): React.ReactNode {
     const [openPanel, setOpenPanel] = useState<any>(false);
