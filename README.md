@@ -1,82 +1,59 @@
-# Graph AI-Agent Designer
+# My-LangGraph-Agent
 ### A Web-Based Application for Designing AI Agents Using Graphs
-
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/HoHuiHsieh-607b70170/)
 
-## Project Overview
-The **Graph AI-Agent Designer** is developed for research, aimed at creating a web-based application that enables users to design AI agents on their personal computers.
+## Version
+Previous version: **0.1.0** (Graph-AI-Agent-Designer)
+Current version: **0.2.0**
 
-This application allows you to design AI agents through an intuitive **Graph-based interface**. A **Graph** in this context represents the workflow of the AI agent, which is composed of **nodes** and the **connections** between them. Here's a breakdown of the main components:
+## Description
+This project is a hands-on learning initiative to create a web-based low-code platform that empowers users to design and deploy multi-agent AI systems directly on their personal computers.
 
-- **Node**: The basic unit in the graph, representing a computation task. It stores data attributes and provides endpoints for connections.
-- **Edge**: An connection that links two nodes, representing the dependency between them. For example, the downstream node cannot process until the upstream node completes.
-- Users can add, drag, select, and remove both nodes and edges directly through the web GUI.
+The application integrates three core modules to deliver its functionality:
+1. **LangGraph**: A low-level orchestration framework designed for building controllable AI agents. While LangChain simplifies LLM application development with integrations and composable components, LangGraph focuses on agent orchestration, offering features like customizable architectures, long-term memory, and human-in-the-loop capabilities to tackle complex tasks reliably.
+2. **ReactFlow**: A robust library for creating interactive, node-based user interfaces (graph editors or flow editors) in React, enabling intuitive visual design of AI workflows.
+3. **Next.js**: A full-stack React framework that provides the tools needed to handle both the front-end and back-end aspects of building web applications. It enables developers to create scalable, performant, and feature-rich applications with ease.
 
-## Getting Started
+Together, these modules provide a seamless environment for designing, visualizing, and managing AI agent workflows.
 
-### System Requirements
-To run this project, you'll need the following:
-- **[Docker](https://www.docker.com/)** (version ^27, for the application deployment)
+**Note:** This project is currently under active development. Debugging and testing are ongoing to ensure stability and functionality.
 
-### Docker Compose Quickstart
-
+## Installation
 1. Clone the repository:
-    ```bash
-    git clone https://github.com/HoHuiHsieh/Graph-AI-Agent-Designer.git
-    ```
+   ```bash
+   git clone https://github.com/HoHuiHsieh/Graph-AI-Agent-Designer.git
+   ```
 2. Navigate to the project directory:
+   ```bash
+   cd My-LangGraph-Agent
+   ```
+3. Start a development container:
     ```bash
-    cd Graph-AI-Agent-Designer
+    ./start-dev.sh
     ```
-3. Start the application using Docker Compose:
+    
+4. Attach to the bash of the running Docker container:
     ```bash
-    bash start.sh -b
+    docker exec -it <container_name> /bin/bash
     ```
-4. Open your browser and access the application at ```https://localhost```.
 
-### Developer Mode
+5. Install the required packages:
+    ```bash
+    npm install
+    ```
 
-1. Attach to ```graph-ai-agent-designer/server:dev``` container.
+## Usage
+1. Attach to the bash of the running Docker container:
+    ```bash
+    docker exec -it <container_name> /bin/bash
+    ```
+    
+2. Run the application:
+   ```bash
+   npm run dev
+   ```
+   
+2. Access the application at `http://localhost:3000`.
 
-2. Navigate to the frontend and the backend directories.
-
-3. Start the developer application.
-  ```bash
-  npm run dev
-  ```
-
-4. Coding...
-
-5. Open your browser and check your updates at ```https://localhost:3001```.
-
-
-## Customise
-
-### LLM Inference Service Providers
-You can integrate various LLM (Large Language Model) inference services into the **Graph AI-Agent Designer** workflow. Below is example of service provider:
-
-- **OpenAI**:  
-  Access the [OpenAI](https://platform.openai.com/) and apply for your own API key to integrate their LLM services. Once the API key has been obtained, update the environment variables in the `docker-compose.yml` file with the following parameters:
-  ```yaml
-  environment:
-    - OPENAI_API_KEY=your_api_key
-  ```
-
-### Python Package
-Developers can add their Python packages to run their code in the workflow. These packages can be installed by modifying the **Dockerfile** in project folder.
-
-To install custom Python packages, add the necessary installation commands to the Dockerfile like this:
-
-```dockerfile
-...
-# Add custom Python packages
-RUN apt update \
-    && apt install python3 python3-<package_name_1> python3-<package_name_2> ... -y \
-    && apt clean
-...
-```
-
-Ensure that all required dependencies for your custom nodes are specified and installed through the Dockerfile to avoid runtime issues. After making changes, rebuild the Docker image to apply the updates.
-
-## Screenshot
-![Screenshot](/image/example.png)
+## License
+This project is licensed under the  GPL-3.0 License. See the [LICENSE](LICENSE) file for details.

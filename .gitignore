@@ -1,8 +1,5 @@
-.cache
-.gnupg
-.npm
-.ssh
-.vscode-server
-volume
-release
-docker-compose.yml
+node_modules
+.next
+docs
+old
+test.json

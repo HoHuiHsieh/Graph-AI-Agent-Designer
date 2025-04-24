@@ -1,0 +1,393 @@
+{
+	"nodes": [
+		{
+			"id": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"type": "agent",
+			"data": {
+				"type": "react-agent",
+				"name": "ReActAgent",
+				"handoffs": {
+					"items": [
+						{
+							"name": "Subflow",
+							"express": ""
+						}
+					]
+				},
+				"memory": false,
+				"systemPrompt": "You are an useful AI agent.",
+				"userPrompt": "{{ $json.Chat.input }}"
+			},
+			"position": {
+				"x": 585,
+				"y": 480
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 120,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 120,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 585,
+				"y": 480
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "model-openai-a32eb26bdc0042f29a4b3c877ce2870d",
+			"type": "model",
+			"data": {
+				"type": "openai",
+				"name": "OpenAI",
+				"handoffs": {},
+				"credName": "OpenAI Credential ",
+				"model": "gpt-4o-mini",
+				"max_completion_tokens": 1024,
+				"frequency_penalty": 0,
+				"presence_penalty": 0,
+				"parallel_tool_calls": false,
+				"top_p": 0.9,
+				"temperature": 0.9
+			},
+			"position": {
+				"x": 585,
+				"y": 570
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 30,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 585,
+				"y": 570
+			},
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-chat-aa61642346cc4cd6a9df2629a3cd078c",
+			"type": "flowpoint",
+			"data": {
+				"type": "chat",
+				"name": "Chat",
+				"handoffs": {
+					"items": [
+						{
+							"name": "ReActAgent",
+							"express": ""
+						}
+					]
+				}
+			},
+			"position": {
+				"x": 480,
+				"y": 480
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 480,
+				"y": 480
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-end-8f1937bafee243a79e09d74952eeedc7",
+			"type": "flowpoint",
+			"data": {
+				"type": "end",
+				"name": "ChatEnd",
+				"handoffs": {
+					"items": []
+				}
+			},
+			"position": {
+				"x": 840,
+				"y": 480
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 840,
+				"y": 480
+			},
+			"dragging": false
+		},
+		{
+			"id": "default-subflow-70968504771047e9ba174af6ce66ab70",
+			"type": "default",
+			"data": {
+				"type": "subflow",
+				"name": "Subflow",
+				"handoffs": {
+					"items": [
+						{
+							"name": "ChatEnd",
+							"express": ""
+						}
+					]
+				},
+				"workflowId": "flowpoint-start-2f2241eda535440080aadca9229324be"
+			},
+			"position": {
+				"x": 750,
+				"y": 480
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"selected": true,
+			"positionAbsolute": {
+				"x": 750,
+				"y": 480
+			},
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-start-2f2241eda535440080aadca9229324be",
+			"type": "flowpoint",
+			"data": {
+				"type": "start",
+				"name": "__START__",
+				"handoffs": {
+					"items": [
+						{
+							"name": "PostgreSQL",
+							"express": ""
+						}
+					]
+				}
+			},
+			"position": {
+				"x": 495,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 495,
+				"y": 705
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-end-7690ee75706342b48a4fb136cd3f01ff",
+			"type": "flowpoint",
+			"data": {
+				"type": "end",
+				"name": "__END__",
+				"handoffs": {
+					"items": [],
+					"useAi": false,
+					"credName": "",
+					"model": ""
+				}
+			},
+			"position": {
+				"x": 735,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 735,
+				"y": 705
+			},
+			"dragging": false
+		},
+		{
+			"id": "default-postgresql-868b67b8221f44f886e01b5e28f891e7",
+			"type": "default",
+			"data": {
+				"type": "postgresql",
+				"name": "PostgreSQL",
+				"handoffs": {
+					"items": [
+						{
+							"name": "__END__",
+							"express": ""
+						}
+					]
+				},
+				"credName": "PostgreSQL Credential",
+				"query": "SELECT CURRENT_TIMESTAMP;"
+			},
+			"position": {
+				"x": 630,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 630,
+				"y": 705
+			},
+			"dragging": false
+		}
+	],
+	"edges": [
+		{
+			"source": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"sourceHandle": "model",
+			"target": "model-openai-a32eb26bdc0042f29a4b3c877ce2870d",
+			"targetHandle": "model",
+			"type": "model",
+			"id": "reactflow__edge-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647model-model-openai-a32eb26bdc0042f29a4b3c877ce2870dmodel"
+		},
+		{
+			"source": "flowpoint-chat-aa61642346cc4cd6a9df2629a3cd078c",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-flowpoint-chat-aa61642346cc4cd6a9df2629a3cd078cflow-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow"
+		},
+		{
+			"source": "agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647",
+			"sourceHandle": "flow",
+			"target": "default-subflow-70968504771047e9ba174af6ce66ab70",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-9186d2ec5faf4c4ea8481b3bf689a647flow-default-subflow-70968504771047e9ba174af6ce66ab70flow"
+		},
+		{
+			"source": "default-subflow-70968504771047e9ba174af6ce66ab70",
+			"sourceHandle": "flow",
+			"target": "flowpoint-end-8f1937bafee243a79e09d74952eeedc7",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-default-subflow-70968504771047e9ba174af6ce66ab70flow-flowpoint-end-8f1937bafee243a79e09d74952eeedc7flow"
+		},
+		{
+			"source": "flowpoint-start-2f2241eda535440080aadca9229324be",
+			"sourceHandle": "flow",
+			"target": "default-postgresql-868b67b8221f44f886e01b5e28f891e7",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-flowpoint-start-2f2241eda535440080aadca9229324beflow-default-postgresql-868b67b8221f44f886e01b5e28f891e7flow"
+		},
+		{
+			"source": "default-postgresql-868b67b8221f44f886e01b5e28f891e7",
+			"sourceHandle": "flow",
+			"target": "flowpoint-end-7690ee75706342b48a4fb136cd3f01ff",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-default-postgresql-868b67b8221f44f886e01b5e28f891e7flow-flowpoint-end-7690ee75706342b48a4fb136cd3f01ffflow"
+		}
+	],
+	"credentials": {
+		"openai": [
+			{
+				"credName": "OpenAI Credential ",
+				"apiKey": "your-openai-api-key",
+				"baseUrl": "https://api.openai.com/v1"
+			}
+		],
+		"postgresql": [
+			{
+				"credName": "PostgreSQL Credential",
+				"host": "0.0.0.0",
+				"port": 5432,
+				"database": "postgres",
+				"user": "root",
+				"password": "your-secret-password"
+			}
+		]
+	}
+}
