@@ -1,7 +1,7 @@
 /**
- * @fileoverview This file defines types for nodes used in the application,
+ * @fileoverview This file defines the types for the nodes and edges used in the LangGraph class.
  * 
- * @author Hsieh,HoHui <billhsies@gmail.com>
+ * @author @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import { OpenAIModelPropsType } from "./api";
 
@@ -28,15 +28,27 @@ export const DATA_TYPES = {
 
 // Base node data types
 
-export type BaseHandoffType = {
-    items: {
-        name: string;
-        express: string;
-    }[];
-    useAi: boolean;
-    credName?: string;
-    model?: string;
+export type BaseAIHandoffItemType = {
+    name: string;
+    description: string;
 }
+export type BaseAIHandoffType = {
+    useAi: true;
+    items: BaseAIHandoffItemType[];
+    credName: string;
+    model: string;
+    prompt: string;
+}
+// export type BaseExpressHandoffItemType = {
+//     name: string;
+//     express: string;
+// }
+// export type BaseExpressHandoffType = {
+//     useAi: true;
+//     items: BaseExpressHandoffItemType[];
+// }
+
+export type BaseHandoffType = BaseAIHandoffType;
 
 export type BaseNodeDataType<T = {}> = {
     type: string;
@@ -154,7 +166,7 @@ export interface AgentNode {
         tools: (CodeToolDataType | HttpToolDataType | PostgreSQLToolDataType)[];
         memory: boolean;
         systemPrompt: string;
-        userPrompt: string;
+        // userPrompt: string;
     }>;
 }
 

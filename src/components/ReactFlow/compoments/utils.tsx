@@ -4,7 +4,7 @@
  * @author Hsieh
  */
 import { getOutgoers, Node, Edge } from "reactflow";
-import { ArgumentsType } from "../../../types/nodes";
+import { ArgumentsType, BaseAIHandoffItemType, BaseExpressHandoffItemType } from "../../../types/nodes";
 import { NODE_TYPES } from "../../../types/nodes";
 
 
@@ -106,8 +106,8 @@ export function updateHandoffs(
     node: Node,
     nodes: Node[],
     edges: Edge[],
-    handoffs: any[] | undefined
-): any[] | undefined {
+    handoffs: BaseAIHandoffItemType[] | BaseExpressHandoffItemType[] | undefined
+): BaseAIHandoffItemType[] | BaseExpressHandoffItemType[] | undefined {
     const outgoers = getOutgoers(node, nodes, edges)
         .filter((outgoer) => [NODE_TYPES.AGENT, NODE_TYPES.DEFAULT, NODE_TYPES.FLOWPOINT].includes(outgoer.type))
         .map((outgoer) => outgoer.data.name);
@@ -117,8 +117,10 @@ export function updateHandoffs(
     return outgoers.map((name) => {
         const condition = handoffs?.find((cond) => cond.name === name);
         return {
+            description: "",
+            expression: "",
+            ...condition,
             name,
-            express: condition?.express || "",
         };
     });
 }
@@ -153,7 +155,7 @@ export async function fetchModelList(apiKey: string, baseURL: string): Promise<s
         // Parse the response JSON and extract the model IDs
         const data = await response.json();
         return data?.data?.map((model: { id: string }) => model.id) || [];
-        
+
     } catch (error) {
         console.error("Failed to fetch model list:", error);
         return;

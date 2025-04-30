@@ -46,9 +46,36 @@ const theme = createTheme({
             fontSize: "2rem",
             fontWeight: 600,
         },
+        h3: {
+            fontSize: "1.75rem",
+            fontWeight: 500,
+        },
+        h4: {
+            fontSize: "1.5rem",
+            fontWeight: 500,
+        },
+        subtitle1: {
+            fontSize: "1.25rem",
+            fontWeight: 400,
+        },
+        subtitle2: {
+            fontSize: "1rem",
+            fontWeight: 400,
+        },
         body1: {
             fontSize: "1rem",
             lineHeight: 1.5,
+        },
+        caption: {
+            fontSize: "0.875rem",
+            fontWeight: 300,
+            lineHeight: 1.4,
+        },
+        overline: {
+            fontSize: "0.75rem",
+            fontWeight: 400,
+            textTransform: "uppercase",
+            lineHeight: 1.6,
         },
         button: {
             textTransform: "none", // Disable uppercase transformation

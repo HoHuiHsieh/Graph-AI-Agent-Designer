@@ -14,6 +14,7 @@ import { CredentialType } from "../../../types/credential";
 import { MainStateType } from "../type";
 import { handleHandoffs } from "../node/handoff";
 import { replacePlaceholders } from "../utils";
+import { json } from "stream/consumers";
 
 
 /**
@@ -62,7 +63,7 @@ export function ReActAgentGraph(
     credentials: CredentialType,
     memorySaver: MemorySaver
 ) {
-    let { name, type, model, tools, memory, userPrompt, systemPrompt, handoffs } = data;
+    let { name, type, model, tools, memory, systemPrompt, handoffs } = data;
 
     // check type
     if (type !== DATA_TYPES.REACT_AGENT) {
@@ -74,7 +75,7 @@ export function ReActAgentGraph(
     switch (model.type) {
         case "openai":
             let openAiCredential = credentials.openai.find((cred) => cred.credName === model.credName);
-            let chatCompletionProps = {
+            let chatCompletionProps: ChatOpenAIFields = {
                 model: model.model,
                 topP: model.top_p,
                 temperature: model.temperature,
@@ -82,7 +83,7 @@ export function ReActAgentGraph(
                 frequencyPenalty: model.frequency_penalty,
                 presencePenalty: model.presence_penalty,
                 apiKey: openAiCredential.apiKey,
-                parallelToolCalls: model.parallel_tool_calls,
+                stop: model.stop,
                 configuration: {
                     baseURL: openAiCredential.baseUrl,
                 },
@@ -100,7 +101,6 @@ export function ReActAgentGraph(
     // return 
     return async (currentState: MainStateType) => {
         // replace placeholders in userPrompt and systemPrompt
-        const updatedUserPrompt = replacePlaceholders(userPrompt, currentState);
         const updatedSystemPrompt = replacePlaceholders(systemPrompt, currentState);
 
         // Prepare react agent
@@ -111,19 +111,17 @@ export function ReActAgentGraph(
             stateModifier: updatedSystemPrompt,
         })
 
-        // Prepare input for the workflow
-        const inputMessages = [
-            ...currentState.messages,
-            new HumanMessage(updatedUserPrompt)
-        ];
-
         // Invoke the workflow and get the output
-        const workflowOutput = await workflow.invoke({ messages: inputMessages });
+        const workflowOutput = await workflow.invoke({ messages: currentState.messages });
 
         // Return the updated state
         const updatedState = {
             ...currentState,
             messages: workflowOutput.messages,
+            json: {
+                ...currentState.json,
+                [name]: [...(currentState.json[name] || []), workflowOutput.messages.at(-1).text],
+            }
         };
 
         // Process handoffs if any

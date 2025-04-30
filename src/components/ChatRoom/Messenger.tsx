@@ -76,19 +76,28 @@ export default function Messenger({ }: MessengerProps): React.ReactNode {
                 // Update the received messages state
                 const entries: [string, any][] = Object.entries(parsedChunk);
                 setReceivedMessages((prev) => {
+                    // Update the messages map with the new entries
                     const updatedMessages = new Map(prev);
+
+                    // Iterate over the entries and update the messages
                     entries.forEach(([key, { json, messages }]) => {
                         if (!nodeNames.includes(key) || !Array.isArray(messages)) return;
 
+                        // Iterate over the messages and update the map
                         messages.forEach((value) => {
                             if (!value?.kwargs?.id) return;
 
+                            // Update the message in the map
+                            // and add it to the indexes if not already present
                             const id = value.kwargs.id;
                             updatedMessages.set(id, value);
-
                             const indexes = updatedMessages.get("indexes");
-                            if (!indexes.includes(id)) updatedMessages.set("indexes", [...indexes, id]);
+                            if (!indexes.includes(id)) {
+                                updatedMessages.set("indexes", [...indexes, id]);
+                            };
 
+                            // Update the jsonData with the new data
+                            // and merge it with the existing data
                             jsonData = { ...jsonData, ...(json || {}) };
                         });
                     });
@@ -96,6 +105,8 @@ export default function Messenger({ }: MessengerProps): React.ReactNode {
                 });
             }
 
+            // Update the result data with the new messages and jsonData
+            // and merge it with the existing data
             setResultData((data) => ({
                 json: { ...data.json, ...jsonData },
                 messages: receivedMessages.get("indexes").map((key) => receivedMessages.get(key)),
@@ -113,17 +124,18 @@ export default function Messenger({ }: MessengerProps): React.ReactNode {
     const handleSend = async () => {
         if (!input.trim()) return;
 
+        // Get the nodes and edges from the ReactFlow instance
+        // and find the chat node
         const nodes = getNodes();
         const edges = getEdges();
         const chatNode = nodes.find((node) => node.data.type === DATA_TYPES.CHAT);
-
         if (!chatNode) {
             alert("Chat node not found");
-            // Optionally, you can log an error or show a message to the user
             console.error("Chat node not found");
             return;
         }
 
+        // Set the loading state to true
         setLoading(true);
 
         try {
@@ -135,6 +147,7 @@ export default function Messenger({ }: MessengerProps): React.ReactNode {
             await receiveChunkData(chunkGenerator);
         } catch (error) {
             console.error("Error sending message:", error);
+            alert(`Error: ${JSON.stringify(error, null, 2)}`);
         }
     }
 
@@ -240,7 +253,7 @@ export default function Messenger({ }: MessengerProps): React.ReactNode {
                     focused
                     rows={3}
                     variant="outlined"
-                    style={{ padding: "10px", paddingBottom: 0, fontSize: 28 }}
+                    style={{ padding: "10px", paddingBottom: 0, fontSize: 24 }}
                     disabled={loading}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -258,7 +271,7 @@ export default function Messenger({ }: MessengerProps): React.ReactNode {
                         input: {
                             endAdornment: setEndAdornment(),
                             style: {
-                                fontSize: 28,
+                                fontSize: 24,
                                 backgroundColor: theme.palette.grey[50],
                             },
                         }

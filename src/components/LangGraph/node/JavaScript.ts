@@ -51,59 +51,38 @@ export function JavaScriptNode(data: CodeToolDataType, credentials: CredentialTy
             result = `Error executing JavaScript code: ${errorMessage}`;
         }
 
-        // Create updated state with result
-        let jsonData = {...currentState.json}
-
         // Process the result and update the state
         if (typeof result === "string") {
             try {
                 // Try to parse string as JSON
-                jsonData = {
-                    ...jsonData,
-                    [name]: JSON.parse(result),
-                };
+                result = JSON.parse(result);
             } catch (parseError: unknown) {
                 // Store as string if not valid JSON
-                jsonData = {
-                    ...jsonData,
-                    [name]: result,
-                };
+                result = result;
             }
         } else if (result !== null && (typeof result === "object" || Array.isArray(result))) {
             // Store objects and arrays directly
-            jsonData = {
-                ...jsonData,
-                [name]: result,
-            };
+            result = result;
         } else {
             // Handle invalid results
-            jsonData = {
-                ...jsonData,
-                [name]: "The result is not a valid JSON, object, or array. Please check the code.",
-            };
+            result = "The result is not a valid JSON, object, or array. Please check the code.";
         }
 
         // Update the application state with the response data
-        const tool_call_id = crypto.randomUUID();
+        typeof result === "object" ? JSON.stringify(result, null, 2) : `${result}`;
+        let resContent = "<tool>\nExecute Code:\n```javascript\n" + `${updatedCode}` + "\n```"
+        resContent = resContent + `\n\nResult:\n${result}\n</tool>`;
         const updatedState = {
             messages: [
                 ...currentState.messages,
                 new AIMessage({
-                    content: "Executeing JavaScript code...",
-                    tool_calls: [{
-                        id: tool_call_id,
-                        name,
-                        args: {
-                            code: updatedCode
-                        }
-                    }]
+                    content: resContent,
                 }),
-                new ToolMessage({
-                    tool_call_id: tool_call_id,
-                    content: jsonData[name] || "No result returned from the code execution.",
-                })
             ],
-            json: jsonData,
+            json: {
+                ...currentState.json,
+                [name]: [...(currentState.json[name] || []), result],
+            },
         };
 
         return handleHandoffs(handoffs, name, updatedState, credentials);

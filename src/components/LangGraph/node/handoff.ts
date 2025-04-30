@@ -40,90 +40,67 @@ export async function handleHandoffs(handoffs: BaseHandoffType, name: string, st
             return updatedState;
         }
 
+        // throw error if useAi is false
+        if (!handoffs.useAi) {
+            throw new Error(`Handoff without using AI decision is currently not supported.`);
+        }
+
         // if use AI decision, define model to invoke
-        if (handoffs.useAi) {
-            const { model, credName, items } = handoffs;
-            const nameList = items.map((item) => item.name);
+        const { model, credName, items, prompt } = handoffs;
+        const nameList = items.map((item) => item.name);
 
-            // Build the inference model based on the provided configuration
-            let openAiCredential = credentials.openai.find((cred) => cred.credName === credName);
-            if (!openAiCredential) {
-                throw new Error(`Credential not found for model ${model}`);
-            }
-            const inferModel = new ChatOpenAI({
-                model: model,
-                apiKey: openAiCredential.apiKey,
-                configuration: {
-                    baseURL: openAiCredential.baseUrl,
-                },
-            }).bindTools([
-                tool(() => "selectTarget", {
-                    name: "selectTarget",
-                    description: "Invoke this tool to select a sub-flow.",
-                    schema: z.object({
-                        target: z.enum(nameList as [string, ...string[]]).describe("Sub-flow name"),
-                    }),
-                })
-            ]);
+        // Define the tool to select a target
+        const getTargetTool = tool(() => "selectTarget", {
+            name: "selectTarget",
+            description: "Invoke this tool to select a target.",
+            schema: z.object({
+                target: z.enum(nameList as [string, ...string[]]).describe("Target name."),
+            }),
+        })
 
-            // Prepare the input messages for the model
-            const inputMessages = [
-                ...state.messages,
-                new HumanMessage(`
-                Select a sub-flow by using the tool that helps you generate the best response.
-                If none are needed, go to the end.
-                `),
-            ];
-
-            // Invoke the model with the input messages
-            const result = await inferModel.invoke(inputMessages);
-
-            // Check if the result contains a valid tool call
-            if (result.tool_calls && result.tool_calls.length > 0) {
-                // Extract the target name from the tool call
-                const targetName = result.tool_calls[0].args.target;
-                console.log(`\nTarget name: ${targetName}\n`);
-
-                // return the updated state with the target handoff
-                return new Command({
-                    goto: targetName,
-                    update: updatedState
-                });
-            }
-            throw new Error(`No valid handoff found for node ${name}`);
+        // Find the OpenAI credential based on the provided credName
+        let openAiCredential = credentials.openai.find((cred) => cred.credName === credName);
+        if (!openAiCredential) {
+            throw new Error(`Credential not found for model ${model}`);
         }
 
-        // use expression to evaluate the handoffs
-        for (const h of handoffs.items) {
-            const { name: targetName, express: code } = h;
-            const updatedCode = replacePlaceholders(code, updatedState);
+        // Build the inference model based on the provided configuration
+        const inferModel = new ChatOpenAI({
+            model: model,
+            apiKey: openAiCredential.apiKey,
+            configuration: {
+                baseURL: openAiCredential.baseUrl,
+            },
+        }).bindTools([getTargetTool], { tool_choice: getTargetTool.name });
 
-            // Execute the JavaScript code
-            let result: unknown;
-            try {
-                // Execute the JavaScript code
-                const func = new Function(updatedCode);
-                result = await func();
-            } catch (executionError: unknown) {
-                const errorMessage = executionError instanceof Error
-                    ? executionError.message
-                    : String(executionError);
+        // Prepare the input messages for the model
+        const newState = {
+            ...state,
+            options: items.map((item) => `- ${item.name}: ${item.description}`).join("\n")
+        };
+        const userPrompt = replacePlaceholders(prompt, newState);
+        const inputMessages = [
+            ...state.messages,
+            new HumanMessage(`${userPrompt}`),
+        ];
 
-                throw new Error(`Error executing JavaScript code: ${errorMessage}`);
-            }
+        // Invoke the model with the input messages
+        const result = await inferModel.invoke(inputMessages);
 
-            // if the expression is true, return the updated state
-            if (result) {
-                return new Command({
-                    goto: targetName,
-                    update: updatedState
-                });
-            }
-            // if the expression is false, continue to the next handoff
+        // Check if the result contains a valid tool call
+        if (result.tool_calls && result.tool_calls.length > 0) {
+            // Extract the target name from the tool call
+            const targetName = result.tool_calls[0].args.target;
+
+            // return the updated state with the target handoff
+            return new Command({
+                goto: targetName,
+                update: updatedState
+            });
         }
-
-        // if no valid handoff found, throw an error
         throw new Error(`No valid handoff found for node ${name}`);
+
+
     } finally {
         isProcessing = false; // Release the lock
     }

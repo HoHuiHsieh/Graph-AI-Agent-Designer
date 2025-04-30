@@ -11,7 +11,7 @@ export type OpenAIModelPropsType = {
     temperature?: number;
     frequency_penalty?: number;
     presence_penalty?: number;
-    parallel_tool_calls?: boolean;
+    stop?: string[];
 }
 
 export type OpenAIConnectionProps = {

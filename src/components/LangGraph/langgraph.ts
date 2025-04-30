@@ -12,6 +12,8 @@ import { CleanMemoryGraph, ReActAgentGraph } from "./prebuild";
 import { CredentialType } from "../../types/credential";
 import { DATA_TYPES, NODE_TYPES } from "../../types/nodes";
 import events from 'events';
+import { HumanMessage } from "@langchain/core/messages";
+import { replacePlaceholders } from "./utils";
 
 events.EventEmitter.defaultMaxListeners = 50;
 
@@ -127,8 +129,8 @@ export default class LangGraph {
 
     // Return the stream generator
     let inputs: typeof MainStateAnnotation.State = {
-      json: { Chat: { input: user_prompt } },
-      messages: []
+      json: {},
+      messages: [new HumanMessage(user_prompt)],
     };
 
     // Return the stream
@@ -136,7 +138,7 @@ export default class LangGraph {
       configurable: { thread_id: workflowId },
       streamMode: "updates",
       subgraphs: true,
-      recursionLimit: 10,
+      recursionLimit: 25,
       signal: this.abortController.signal,
     });
   }

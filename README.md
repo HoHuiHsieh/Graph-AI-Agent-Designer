@@ -4,7 +4,7 @@
 
 ## Version
 - **Previous version:** 0.1.0 (Graph-AI-Agent-Designer)
-- **Current version:** 0.2.0
+- **Current version:** 0.2.1
 
 ## Description
 My-LangGraph-Agent is a web-based low-code platform designed to empower users to create and deploy multi-agent AI systems directly on their personal computers. It provides an intuitive interface for designing, visualizing, and managing AI workflows.
@@ -28,6 +28,9 @@ Here are some example images showcasing the application's interface and features
 
 2. **ChatRoom:**
    ![Workflow Visualization](./assets/images/image02.png)
+
+   ## Example Workflow
+   You can find an example workflow file in the following location: [assets/example.json](./assets/example.json)
 
 ## Installation
 **Prerequisite:** This project requires a Linux (Ubuntu) environment.

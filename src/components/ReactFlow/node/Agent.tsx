@@ -36,30 +36,34 @@ export default function AgentNode(props: AgentNodePropsType): React.ReactNode {
             {/* Icon button */}
             <Button
                 style={{
-                    width: "100%",
-                    height: "100%",
+                    width: "120px",
+                    height: "50px",
                     left: 0,
                     color: "black",
                     textTransform: 'none',
+
                 }}
                 onClick={() => setOpenPanel(props)}
                 startIcon={Icon}
             >
-                <Box display="flex" flexDirection="column" >
+                <Box display="flex" flexDirection="column" maxWidth="70%" >
                     <Typography variant="caption"
                         align="center"
                         m={0}
                         p={0}
+                        noWrap
+                        style={{ fontSize: "0.8rem", fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", }}
                     >
-                        AI Agent
+                        {props.data.name}
                     </Typography>
                     <Typography variant="caption"
                         align="center"
                         m={0}
                         p={0}
                         style={{ fontSize: "0.5rem", color: "gray", }}
+                        noWrap
                     >
-                        {props.data.name}
+                        ReAct
                     </Typography>
                 </Box>
             </Button>

@@ -7,6 +7,9 @@ import React from "react";
 import { Box, Typography, Stack, Paper, useTheme } from "@mui/material";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 
 interface HumanMessageBubbleProps {
@@ -51,9 +54,12 @@ export default function HumanMessageBubble({ content }: HumanMessageBubbleProps)
                         variant="body1"
                         color={theme.palette.primary.contrastText}
                         component="span"
-                        fontSize={28}
+                        fontSize={24}
                     >
-                        <Markdown remarkPlugins={[remarkGfm]}>
+                        <Markdown
+                            remarkPlugins={[remarkGfm, remarkMath]}
+                            rehypePlugins={[rehypeKatex]}
+                        >
                             {content}
                         </Markdown>
                     </Typography>

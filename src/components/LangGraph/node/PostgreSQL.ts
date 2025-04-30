@@ -78,28 +78,19 @@ export function PostgreSQLNodeType(data: PostgreSQLNodeDataType, credentials: Cr
         }
 
         // Return the updated state
-        const tool_call_id = crypto.randomUUID();
+        const queryResult = errorResult || JSON.stringify(result.rows);
+        let resContent = "<tool>\nQuery database:\n```sql\n" + `${updatedQuery}` + "\n```";
+        resContent = resContent + `\n\nResult:\n${queryResult}\n</tool>`;
         const updatedState = {
             messages: [
                 ...currentState.messages,
                 new AIMessage({
-                    content: "Connecting to a PostgreSQL database...",
-                    tool_calls: [{
-                        id: tool_call_id,
-                        name: name,
-                        args: {
-                            query: updatedQuery,
-                        }
-                    }]
-                }),
-                new ToolMessage({
-                    tool_call_id: tool_call_id,
-                    content: `PostgreSQL query result: ${errorResult || JSON.stringify(result.rows)}`
+                    content: resContent,
                 })
             ],
             json: {
                 ...currentState.json,
-                [name]: errorResult || JSON.stringify(result.rows),
+                [name]: [...(currentState.json[name] || []), queryResult],
             }
         };
 

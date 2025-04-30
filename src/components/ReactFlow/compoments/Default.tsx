@@ -40,9 +40,10 @@ export const initialNodeData: BaseNodeDataType = {
     name: "Default",
     handoffs: {
         items: [],
-        useAi: false,
+        useAi: true,
         credName: "",
         model: "",
+        prompt: "",
     },
 };
 
@@ -93,7 +94,12 @@ export default function DefaultForm(): React.ReactNode {
                     variant="outlined"
                     size="small"
                     value={state.name}
-                    onChange={(e) => dispatch({ type: "SET_NAME", value: e.target.value })}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        if (value && /^[A-Za-z0-9_]*$/.test(value)) {
+                            dispatch({ type: "SET_NAME", value });
+                        }
+                    }}
                 />
             }
         />

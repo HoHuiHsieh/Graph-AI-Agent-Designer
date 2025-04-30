@@ -16,7 +16,6 @@ import { ExpandMoreSharp } from "@mui/icons-material";
 import { BaseHandoffType, OpenAiModelDataType } from "../../../types/nodes";
 import { usePanel } from "../../provider";
 import CommonDialog from "./common/dialog";
-import { updateHandoffs } from "./utils";
 import { DATA_TYPES } from "../../../types/nodes";
 import { ModelEditor, initialValues } from "./common/ModelEditor";
 
@@ -31,9 +30,9 @@ type Action =
     | { type: "SET_MAX_COMPLETION_TOKENS"; payload: number }
     | { type: "SET_FREQUENCY_PENALTY"; payload: number }
     | { type: "SET_PRESENCE_PENALTY"; payload: number }
-    | { type: "SET_PARALLEL_TOOL_CALLS"; payload: boolean }
     | { type: "SET_TOP_P"; payload: number }
     | { type: "SET_TEMPERATURE"; payload: number }
+    | { type: "SET_STOP"; payload: string[] }
     | { type: "SET_HEADOFFS"; payload: BaseHandoffType }
 
 // Reducer function to manage state
@@ -51,12 +50,12 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, frequency_penalty: action.payload };
         case "SET_PRESENCE_PENALTY":
             return { ...state, presence_penalty: action.payload };
-        case "SET_PARALLEL_TOOL_CALLS":
-            return { ...state, parallel_tool_calls: action.payload };
         case "SET_TOP_P":
             return { ...state, top_p: action.payload };
         case "SET_TEMPERATURE":
             return { ...state, temperature: action.payload };
+        case "SET_STOP":
+            return { ...state, stop: action.payload };
         default:
             return state;
     }
@@ -117,7 +116,10 @@ export default function OpenAiForm(): React.ReactNode {
                     size="small"
                     value={state.name}
                     onChange={(e) => {
-                        dispatch({ type: "SET_NAME", value: e.target.value });
+                        const value = e.target.value;
+                        if (value && /^[A-Za-z0-9_()]*$/.test(value)) {
+                            dispatch({ type: "SET_NAME", value });
+                        }
                     }}
                 />
             }
@@ -141,31 +143,31 @@ export default function OpenAiForm(): React.ReactNode {
                             }}
                             model={state.model}
                             setModel={(model) => {
-                                dispatch({type: "SET_MODEL",payload: model,});
+                                dispatch({ type: "SET_MODEL", payload: model, });
                             }}
                             temperature={state.temperature}
                             setTemperature={(temperature) => {
-                                dispatch({type: "SET_TEMPERATURE", payload: temperature});
+                                dispatch({ type: "SET_TEMPERATURE", payload: temperature });
                             }}
                             top_p={state.top_p}
                             setTopP={(top_p) => {
-                                dispatch({type: "SET_TOP_P", payload: top_p});
+                                dispatch({ type: "SET_TOP_P", payload: top_p });
                             }}
                             max_completion_tokens={state.max_completion_tokens}
                             setMaxCompletionTokens={(tokens) => {
-                                dispatch({type: "SET_MAX_COMPLETION_TOKENS", payload: tokens});
+                                dispatch({ type: "SET_MAX_COMPLETION_TOKENS", payload: tokens });
                             }}
                             frequency_penalty={state.frequency_penalty}
                             setFrequencyPenalty={(penalty) => {
-                                dispatch({type: "SET_FREQUENCY_PENALTY", payload: penalty});
+                                dispatch({ type: "SET_FREQUENCY_PENALTY", payload: penalty });
                             }}
                             presence_penalty={state.presence_penalty}
                             setPresencePenalty={(penalty) => {
-                                dispatch({type: "SET_PRESENCE_PENALTY", payload: penalty});
+                                dispatch({ type: "SET_PRESENCE_PENALTY", payload: penalty });
                             }}
-                            parallel_tool_calls={state.parallel_tool_calls}
-                            setParallelToolCalls={(parallel) => {
-                                dispatch({type: "SET_PARALLEL_TOOL_CALLS", payload: parallel});
+                            stop={state.stop}
+                            setStop={(stop) => {
+                                dispatch({ type: "SET_STOP", payload: stop });
                             }}
                             simplify={false}
                         />

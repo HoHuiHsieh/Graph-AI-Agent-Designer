@@ -55,20 +55,21 @@ const reducer = (state: State, action: Action): State => {
     }
 };
 
-export const initialNodeData = {
+export const initialNodeData: PostgreSQLNodeDataType = {
     type: DATA_TYPES.POSTGRESQL,
     name: "PostgreSQL",
     credName: "",
     query: "",
     handoffs: {
         items: [],
-        useAi: false,
+        useAi: true,
         credName: "",
         model: "",
+        prompt: "",
     },
 };
 
-export const initialToolData = {
+export const initialToolData: PostgreSQLToolDataType = {
     ...initialNodeData,
     description: "",
     arguments: {},
@@ -91,9 +92,14 @@ export default function PostgreSQLForm(): React.ReactNode {
     }
 
     // Use reducer for managing state
+    const initialData = openPanel?.type === "tool" ? initialToolData : initialNodeData;
     const [state, dispatch] = React.useReducer(reducer, {
-        ...openPanel?.type === "tool" ? initialToolData : initialNodeData,
+        ...initialData,
         ...data,
+        handoffs: {
+            ...initialData.handoffs,
+            ...(data?.handoffs || {})
+        }
     });
 
     // Update node data when the component unmounts
@@ -132,7 +138,12 @@ export default function PostgreSQLForm(): React.ReactNode {
                     variant="outlined"
                     size="small"
                     value={state.name}
-                    onChange={(e) => dispatch({ type: "SET_NAME", value: e.target.value })}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        if (value && /^[A-Za-z0-9_]*$/.test(value)) {
+                            dispatch({ type: "SET_NAME", value });
+                        }
+                    }}
                 />
             }
         >

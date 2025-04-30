@@ -87,33 +87,17 @@ export function HttpNode(data: HTTPNodeDataType, credentials: CredentialType) {
         }
 
         // Update the application state with the response data
-        const tool_call_id = crypto.randomUUID();
-        const resContent = typeof responseResult === "string" ? tryParseJson(responseResult) : `${responseResult}`;
+        const resContent = typeof responseResult === "object" ? JSON.stringify(responseResult, null, 2) : `${responseResult}`;
         updatedState = {
             messages: [
                 ...currentState.messages,
                 new AIMessage({
-                    content: "Sending HTTP request...",
-                    tool_calls: [{
-                        id: tool_call_id,
-                        name,
-                        args: {
-                            url, 
-                            method, 
-                            headers, 
-                            body, 
-                            params
-                        }
-                    }]
-                }),
-                new ToolMessage({
-                    tool_call_id: tool_call_id,
-                    content: resContent,
+                    content: `<tool>\nRequest API: ${url}\n\nResult: ${resContent}\n</tool>`,
                 })
             ],
             json: {
                 ...currentState.json,
-                [name]: resContent,
+                [name]: [...currentState.json[name] || [], responseResult],
             },
         };
 

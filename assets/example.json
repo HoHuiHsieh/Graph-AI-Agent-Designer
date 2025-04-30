@@ -1,0 +1,583 @@
+{
+	"nodes": [
+		{
+			"id": "flowpoint-chat-05d228832eb344968cd83b647161911d",
+			"type": "flowpoint",
+			"data": {
+				"type": "chat",
+				"name": "Chat",
+				"handoffs": {
+					"items": [
+						{
+							"description": "",
+							"expression": "",
+							"name": "ProblemSolver"
+						}
+					]
+				}
+			},
+			"position": {
+				"x": 420,
+				"y": 465
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 420,
+				"y": 465
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-end-7513f976675e44859fc7feae07fdea4d",
+			"type": "flowpoint",
+			"data": {
+				"type": "end",
+				"name": "__END__",
+				"handoffs": {
+					"items": []
+				}
+			},
+			"position": {
+				"x": 780,
+				"y": 465
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 780,
+				"y": 465
+			},
+			"dragging": false
+		},
+		{
+			"id": "agent-react-agent-f7a492556bae4e579aa3c6205ef3c39e",
+			"type": "agent",
+			"data": {
+				"type": "react-agent",
+				"name": "SummarizeResult",
+				"handoffs": {
+					"items": [
+						{
+							"description": "",
+							"expression": "",
+							"name": "__END__"
+						}
+					]
+				},
+				"memory": true,
+				"systemPrompt": "You are an expert AI problem-solver, your job is to  summarize the final answer.",
+				"userPrompt": "{{ $json.Chat.input }}"
+			},
+			"position": {
+				"x": 615,
+				"y": 465
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 120,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 120,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 615,
+				"y": 465
+			},
+			"dragging": false
+		},
+		{
+			"id": "model-openai-e52d447919a645af946e9be222ac85f8",
+			"type": "model",
+			"data": {
+				"type": "openai",
+				"name": "OpenAI(1)",
+				"handoffs": {
+					"items": []
+				},
+				"credName": "OpenAI Credential ",
+				"model": "gpt-4o-mini",
+				"max_completion_tokens": 1024,
+				"frequency_penalty": 0,
+				"presence_penalty": 0,
+				"parallel_tool_calls": false,
+				"top_p": 0.9,
+				"temperature": 0.9
+			},
+			"position": {
+				"x": 615,
+				"y": 540
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 30,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 615,
+				"y": 540
+			},
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-start-95fb58c43a1649d99df2b046a4b943d8",
+			"type": "flowpoint",
+			"data": {
+				"type": "start",
+				"name": "__START__",
+				"handoffs": {
+					"items": [
+						{
+							"description": "",
+							"expression": "",
+							"name": "ReasoningAgent"
+						}
+					]
+				}
+			},
+			"position": {
+				"x": 420,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 420,
+				"y": 705
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"type": "agent",
+			"data": {
+				"type": "react-agent",
+				"name": "ReasoningAgent",
+				"handoffs": {
+					"items": [
+						{
+							"description": "Activate this target to keep reasoning forward.",
+							"expression": "",
+							"name": "ReasoningAgent"
+						},
+						{
+							"description": "Activate this tool to check your conclusions.",
+							"expression": "",
+							"name": "VerifierAgent"
+						}
+					],
+					"useAi": true,
+					"credName": "OpenAI Credential ",
+					"model": "gpt-4o-mini",
+					"prompt": "You are a helpful AI agent that choose the most appropriate target from the options based on your thinking.\n\nHere are the options: \n{{ $options }}\n\nInvoke tool to activate a target from the options."
+				},
+				"memory": false,
+				"systemPrompt": "You are an expert AI reasoning agent.\nYour task is to:\n1. Carefully analyze the user's problem.\n2. Break down the complex problem into clear, smaller steps.\n3. Solve the problem step-by-step, thinking carefully at each stage.\n4. For every step, start your response with <think> tag, and **wrap your reasoning inside <think>...</think> tags**.\n\nFollow this structure exactly.",
+				"userPrompt": "{{ $json.Chat.input }}"
+			},
+			"position": {
+				"x": 510,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 120,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 120,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 510,
+				"y": 705
+			},
+			"selected": true,
+			"dragging": false
+		},
+		{
+			"id": "model-openai-713a1082d9ee4281bf8517eae6e2f7a7",
+			"type": "model",
+			"data": {
+				"type": "openai",
+				"name": "OpenAI(3)",
+				"handoffs": {
+					"items": []
+				},
+				"credName": "OpenAI Credential ",
+				"model": "gpt-4o-mini",
+				"max_completion_tokens": 1024,
+				"frequency_penalty": 0,
+				"presence_penalty": 0,
+				"parallel_tool_calls": false,
+				"top_p": 0.9,
+				"temperature": 0.9,
+				"stop": [
+					"</think>"
+				]
+			},
+			"position": {
+				"x": 510,
+				"y": 795
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 30,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 510,
+				"y": 795
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "agent-react-agent-c08783b4eb594607a82cd943acadd647",
+			"type": "agent",
+			"data": {
+				"type": "react-agent",
+				"name": "VerifierAgent",
+				"handoffs": {
+					"items": [
+						{
+							"description": "Activate this target to keep reasoning forward.",
+							"expression": "",
+							"name": "ReasoningAgent"
+						},
+						{
+							"description": "Activate this target after forming correct answer.",
+							"expression": "",
+							"name": "__ANSWER__"
+						}
+					],
+					"useAi": true,
+					"credName": "OpenAI Credential ",
+					"model": "gpt-4o-mini",
+					"prompt": "You are a helpful AI agent that choose the most appropriate target from the options based on your last verification.\n\nHere are the options: \n{{ $options }}\n\nInvoke tool to activate a target from the options."
+				},
+				"memory": false,
+				"systemPrompt": "You are an expert AI verify agent.\nYour task is to:\n1. Read the last <think>...</think> step provided.\n2. Carefully verify if the reasoning inside that <think> is logically sound, factually correct, and complete.\n3. Then, output your evaluation in one of two ways:\n - If the step is correct, output: <verify>Correct: [Brief reason why it is correct]</verify>\n - If the step has issues, output: <verify>Incorrect: [Brief description of the problem and a suggested correction]</verify>\n\nImportant: Only assess the content inside the last <think>...</think> block, and do not re-solve the entire problem.\n\nFollow this structure exactly.",
+				"userPrompt": "{{ $json.Chat.input }}"
+			},
+			"position": {
+				"x": 660,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 120,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 120,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 660,
+				"y": 705
+			},
+			"dragging": false
+		},
+		{
+			"id": "model-openai-7ab82cdb707144b298f891db3f43e428",
+			"type": "model",
+			"data": {
+				"type": "openai",
+				"name": "OpenAI(4)",
+				"credName": "OpenAI Credential ",
+				"model": "gpt-4o-mini",
+				"max_completion_tokens": 1024,
+				"frequency_penalty": 0,
+				"presence_penalty": 0,
+				"parallel_tool_calls": false,
+				"top_p": 0.9,
+				"temperature": 0.9,
+				"stop": [
+					"</verify>"
+				],
+				"handoffs": {}
+			},
+			"position": {
+				"x": 660,
+				"y": 795
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 30,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 660,
+				"y": 795
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "flowpoint-end-8f997c5b8e884a05bcf81d211bc08114",
+			"type": "flowpoint",
+			"data": {
+				"type": "end",
+				"name": "__ANSWER__",
+				"handoffs": {}
+			},
+			"position": {
+				"x": 810,
+				"y": 705
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 25,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 60,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 60,
+			"height": 50,
+			"positionAbsolute": {
+				"x": 810,
+				"y": 705
+			},
+			"selected": false,
+			"dragging": false
+		},
+		{
+			"id": "default-subflow-6f3bfd1ed4304e35b55a5e9326b2e92b",
+			"type": "default",
+			"data": {
+				"type": "subflow",
+				"name": "ProblemSolver",
+				"handoffs": {
+					"items": [
+						{
+							"description": "Activate this tool to summarize your response.",
+							"expression": "",
+							"name": "SummarizeResult"
+						}
+					],
+					"useAi": true,
+					"credName": "OpenAI Credential ",
+					"model": "gpt-4o-mini",
+					"prompt": ""
+				},
+				"workflowId": "flowpoint-start-95fb58c43a1649d99df2b046a4b943d8"
+			},
+			"position": {
+				"x": 525,
+				"y": 465
+			},
+			"style": {
+				"background": "#FFF",
+				"border": "1px solid black",
+				"borderRadius": 10,
+				"fontSize": 16,
+				"padding": 8,
+				"width": 50,
+				"height": 50,
+				"display": "flex",
+				"justifyContent": "center",
+				"alignItems": "center"
+			},
+			"width": 50,
+			"height": 50,
+			"selected": false,
+			"positionAbsolute": {
+				"x": 525,
+				"y": 465
+			},
+			"dragging": false
+		}
+	],
+	"edges": [
+		{
+			"source": "agent-react-agent-f7a492556bae4e579aa3c6205ef3c39e",
+			"sourceHandle": "flow",
+			"target": "flowpoint-end-7513f976675e44859fc7feae07fdea4d",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-f7a492556bae4e579aa3c6205ef3c39eflow-flowpoint-end-7513f976675e44859fc7feae07fdea4dflow"
+		},
+		{
+			"source": "agent-react-agent-f7a492556bae4e579aa3c6205ef3c39e",
+			"sourceHandle": "model",
+			"target": "model-openai-e52d447919a645af946e9be222ac85f8",
+			"targetHandle": "model",
+			"type": "model",
+			"id": "reactflow__edge-agent-react-agent-f7a492556bae4e579aa3c6205ef3c39emodel-model-openai-e52d447919a645af946e9be222ac85f8model"
+		},
+		{
+			"source": "flowpoint-start-95fb58c43a1649d99df2b046a4b943d8",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-flowpoint-start-95fb58c43a1649d99df2b046a4b943d8flow-agent-react-agent-4afadc82a5504540b9b06bbca0c98d75flow"
+		},
+		{
+			"source": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-c08783b4eb594607a82cd943acadd647",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-4afadc82a5504540b9b06bbca0c98d75flow-agent-react-agent-c08783b4eb594607a82cd943acadd647flow"
+		},
+		{
+			"source": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"sourceHandle": "model",
+			"target": "model-openai-713a1082d9ee4281bf8517eae6e2f7a7",
+			"targetHandle": "model",
+			"type": "model",
+			"id": "reactflow__edge-agent-react-agent-4afadc82a5504540b9b06bbca0c98d75model-model-openai-713a1082d9ee4281bf8517eae6e2f7a7model"
+		},
+		{
+			"source": "agent-react-agent-c08783b4eb594607a82cd943acadd647",
+			"sourceHandle": "model",
+			"target": "model-openai-7ab82cdb707144b298f891db3f43e428",
+			"targetHandle": "model",
+			"type": "model",
+			"id": "reactflow__edge-agent-react-agent-c08783b4eb594607a82cd943acadd647model-model-openai-7ab82cdb707144b298f891db3f43e428model"
+		},
+		{
+			"source": "agent-react-agent-c08783b4eb594607a82cd943acadd647",
+			"sourceHandle": "flow",
+			"target": "flowpoint-end-8f997c5b8e884a05bcf81d211bc08114",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-c08783b4eb594607a82cd943acadd647flow-flowpoint-end-8f997c5b8e884a05bcf81d211bc08114flow"
+		},
+		{
+			"source": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-4afadc82a5504540b9b06bbca0c98d75flow-agent-react-agent-4afadc82a5504540b9b06bbca0c98d75flow"
+		},
+		{
+			"source": "agent-react-agent-c08783b4eb594607a82cd943acadd647",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-4afadc82a5504540b9b06bbca0c98d75",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-agent-react-agent-c08783b4eb594607a82cd943acadd647flow-agent-react-agent-4afadc82a5504540b9b06bbca0c98d75flow"
+		},
+		{
+			"source": "flowpoint-chat-05d228832eb344968cd83b647161911d",
+			"sourceHandle": "flow",
+			"target": "default-subflow-6f3bfd1ed4304e35b55a5e9326b2e92b",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-flowpoint-chat-05d228832eb344968cd83b647161911dflow-default-subflow-6f3bfd1ed4304e35b55a5e9326b2e92bflow"
+		},
+		{
+			"source": "default-subflow-6f3bfd1ed4304e35b55a5e9326b2e92b",
+			"sourceHandle": "flow",
+			"target": "agent-react-agent-f7a492556bae4e579aa3c6205ef3c39e",
+			"targetHandle": "flow",
+			"type": "flow",
+			"id": "reactflow__edge-default-subflow-6f3bfd1ed4304e35b55a5e9326b2e92bflow-agent-react-agent-f7a492556bae4e579aa3c6205ef3c39eflow"
+		}
+	],
+	"credentials": {
+		"openai": [
+			{
+				"credName": "OpenAI Credential ",
+				"apiKey": "Your OpenAI API Key",
+				"baseUrl": "https://api.openai.com/v1"
+			}
+		],
+		"postgresql": []
+	}
+}

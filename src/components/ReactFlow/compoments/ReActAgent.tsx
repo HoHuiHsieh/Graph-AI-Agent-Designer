@@ -30,7 +30,7 @@ type Action =
     | { type: "SET_MEMORY"; value: boolean }
     | { type: "SET_QUERY"; value: string }
     | { type: "SET_SYSTEM_PROMPT"; value: string }
-    | { type: "SET_USER_PROMPT"; value: string }
+    // | { type: "SET_USER_PROMPT"; value: string }
     | { type: "SET_HEADOFFS"; value: BaseHandoffType }; // Replace `any` with a more specific type if available
 
 
@@ -42,8 +42,8 @@ const reducer = (state: State, action: Action): State => {
             return { ...state, memory: action.value };
         case "SET_SYSTEM_PROMPT":
             return { ...state, systemPrompt: action.value };
-        case "SET_USER_PROMPT":
-            return { ...state, userPrompt: action.value };
+        // case "SET_USER_PROMPT":
+        //     return { ...state, userPrompt: action.value };
         case "SET_HEADOFFS":
             return { ...state, handoffs: action.value };
         default:
@@ -55,21 +55,24 @@ export const initialNodeData = {
     type: DATA_TYPES.REACT_AGENT,
     name: "ReActAgent",
     memory: false,
-    systemPrompt: `
-You are a helpful AI agent that follows a structured workflow to generate responses.
+    systemPrompt: `You are an expert AI problem-solver.
+Your task is to:
+1. Carefully analyze the user's problem.
+2. Break down the complex problem into clear, smaller steps.
+3. Solve the problem step-by-step, thinking carefully at each stage.
+4. For every step, **wrap your reasoning inside <think>...</think> tags**.
+5. Proceed only after fully thinking through each step before moving to the next.
+6. At the end, **wrap your final answer inside <answer>...</answer> tags**.
 
-When the user asks a question:
-1. Analyze the question step-by-step to determine what information is required.
-2. If the question is complex, break it down into smaller tasks and ask clarifying questions.
-3. If the question requires external information, use the tools available to gather the necessary data.
-4. Provide a clear and concise answer to the user, including any relevant details or context.
+Follow this structure exactly.
 `,
     userPrompt: "{{ $json.Chat.input }}",
     handoffs: {
         items: [],
-        useAi: false,
+        useAi: true,
         credName: "",
         model: "",
+        prompt: "",
     },
 };
 
@@ -126,7 +129,12 @@ export default function ReActAgentForm(): React.ReactNode {
                     variant="outlined"
                     size="small"
                     value={state.name}
-                    onChange={(e) => dispatch({ type: "SET_NAME", value: e.target.value })}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        if (value && /^[A-Za-z0-9_]*$/.test(value)) {
+                            dispatch({ type: "SET_NAME", value });
+                        }
+                    }}
                 />
             }
         >
@@ -161,7 +169,7 @@ export default function ReActAgentForm(): React.ReactNode {
                                     dispatch({ type: "SET_SYSTEM_PROMPT", value: e.target.value });
                                 }}
                             />
-                            <TextField
+                            {/* <TextField
                                 label="User Prompt"
                                 variant="outlined"
                                 fullWidth
@@ -173,7 +181,7 @@ export default function ReActAgentForm(): React.ReactNode {
                                 onChange={(e) => {
                                     dispatch({ type: "SET_USER_PROMPT", value: e.target.value });
                                 }}
-                            />
+                            /> */}
                             <FormControlLabel
                                 label="Memory"
                                 control={
@@ -183,7 +191,7 @@ export default function ReActAgentForm(): React.ReactNode {
                                             dispatch({ type: "SET_MEMORY", value: event.target.checked || false });
                                         }}
                                     />
-                                }                                
+                                }
                             />
                         </Stack>
                     </AccordionDetails>

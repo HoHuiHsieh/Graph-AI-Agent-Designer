@@ -14,7 +14,7 @@
  * @author Hsieh,HoHui <billhsies@gmail.com>
  */
 import React from "react";
-import { FormControl, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material";
+import { Divider, FormControl, Input, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material";
 import { usePanel } from "../../../provider";
 import { fetchModelList } from "../utils";
 
@@ -29,6 +29,7 @@ export const initialValues = {
     parallel_tool_calls: false,
     top_p: 0.9,
     temperature: 0.9,
+    stop: undefined,
 };
 
 interface ModelEditorProps {
@@ -42,13 +43,15 @@ interface ModelEditorProps {
     setFrequencyPenalty?: (frequency_penalty: number) => void;
     presence_penalty?: number;
     setPresencePenalty?: (presence_penalty: number) => void;
-    parallel_tool_calls?: boolean;
-    setParallelToolCalls?: (parallel_tool_calls: boolean) => void;
+    // parallel_tool_calls?: boolean;
+    // setParallelToolCalls?: (parallel_tool_calls: boolean) => void;
     top_p?: number;
     setTopP?: (top_p: number) => void;
     temperature?: number;
     setTemperature?: (temperature: number) => void;
     simplify?: boolean;
+    setStop?: (stop: string[]) => void;
+    stop?: string[];
 }
 
 /**
@@ -87,7 +90,34 @@ export function ModelEditor(props: ModelEditorProps): React.ReactNode {
     }, [props.credName, credentials.openai]);
 
     // Handle changes in parameter list
-    const [paramList, setparamList] = React.useState<string[]>([]);
+    const [paramList, setparamList] = React.useState<string[]>(Object.entries(props).reduce((acc, [key, value]) => {
+        if (key === "max_completion_tokens" && value !== undefined) {
+            acc.push("max_completion_tokens");
+        }
+        if (key === "temperature" && value !== undefined) {
+            acc.push("temperature");
+        }
+        if (key === "top_p" && value !== undefined) {
+            acc.push("top_p");
+        }
+        if (key === "frequency_penalty" && value !== undefined) {
+            acc.push("frequency_penalty");
+        }
+        if (key === "presence_penalty" && value !== undefined) {
+            acc.push("presence_penalty");
+        }
+        if (key === "parallel_tool_calls" && value !== undefined) {
+            acc.push("parallel_tool_calls");
+        }
+        if (key === "stop" && value !== undefined) {
+            acc.push("stop");
+        }
+        return acc.sort((a, b) => {
+            if (a < b) return -1;
+            if (a > b) return 1;
+            return 0;
+        });;
+    }, [] as string[]));
     React.useEffect(() => {
         if (!paramList.includes("max_completion_tokens") && props.setMaxCompletionTokens) {
             props.setMaxCompletionTokens(initialValues.max_completion_tokens);
@@ -104,8 +134,11 @@ export function ModelEditor(props: ModelEditorProps): React.ReactNode {
         if (!paramList.includes("presence_penalty") && props.setPresencePenalty) {
             props.setPresencePenalty(initialValues.presence_penalty);
         }
-        if (!paramList.includes("parallel_tool_calls") && props.setParallelToolCalls) {
-            props.setParallelToolCalls(initialValues.parallel_tool_calls);
+        // if (!paramList.includes("parallel_tool_calls") && props.setParallelToolCalls) {
+        //     props.setParallelToolCalls(initialValues.parallel_tool_calls);
+        // }
+        if (!paramList.includes("stop") && props.setStop) {
+            props.setStop(initialValues.stop);
         }
     }, [paramList]);
 
@@ -167,7 +200,7 @@ export function ModelEditor(props: ModelEditorProps): React.ReactNode {
                     labelId="select-model"
                     variant="outlined"
                     size="small"
-                    value={props.model || "None"}
+                    value={modelList.includes(props.model) ? props.model : "None"}
                     onChange={(event) => {
                         if (event.target.value === "None") {
                             props.setModel("");
@@ -195,215 +228,258 @@ export function ModelEditor(props: ModelEditorProps): React.ReactNode {
                 </Select>
             </FormControl>
 
-            {paramList.map((key, index) => {
-                switch (key) {
-                    case "max_completion_tokens":
-                        return (
-                            <TextField key={index}
-                                label="Max Completion Tokens"
-                                variant="outlined"
-                                size="small"
-                                type="number"
-                                fullWidth
-                                value={props.max_completion_tokens}
-                                onChange={(e) => {
-                                    const value = Math.min(4096, Math.max(1, Number(e.target.value)));
-                                    props.setMaxCompletionTokens(value);
-                                }}
-                            />
-                        );
-                    case "temperature":
-                        return (
-                            <TextField key={index}
-                                label="Temperature"
-                                variant="outlined"
-                                size="small"
-                                type="number"
-                                fullWidth
-                                value={props.temperature}
-                                onChange={(e) => {
-                                    const value = Math.min(1, Math.max(0, Number(e.target.value)));
-                                    props.setTemperature(value);
-                                }}
-                                slotProps={{
-                                    htmlInput: {
-                                        min: 0,
-                                        max: 1,
-                                        step: 0.01,
-                                        style: { textAlign: "center" },
-                                    },
-                                    input: {
-                                        startAdornment: (
-                                            <input
-                                                type="range"
-                                                min="0"
-                                                max="1"
-                                                step="0.01"
-                                                value={props.temperature}
-                                                onChange={(e) => props.setTemperature(Number(e.target.value))}
-                                                style={{ width: "100%" }}
-                                            />
-                                        ),
-                                    },
-                                }}
-                            />
-                        )
-                    case "top_p":
-                        return (
-                            <TextField key={index}
-                                label="Top P"
-                                variant="outlined"
-                                size="small"
-                                type="number"
-                                fullWidth
-                                value={props.top_p}
-                                onChange={(e) => {
-                                    const value = Math.min(1, Math.max(0, Number(e.target.value)));
-                                    props.setTopP(value);
-                                }}
-                                slotProps={{
-                                    htmlInput: {
-                                        min: 0,
-                                        max: 1,
-                                        step: 0.01,
-                                        style: { textAlign: "center" },
-                                    },
-                                    input: {
-                                        startAdornment: (
-                                            <input
-                                                type="range"
-                                                min="0"
-                                                max="1"
-                                                step="0.01"
-                                                value={props.top_p}
-                                                onChange={(e) => props.setTopP(Number(e.target.value))}
-                                                style={{ width: "100%" }}
-                                            />
-                                        ),
-                                    },
-                                }}
-                            />
-                        )
-                    case "frequency_penalty":
-                        return (
-                            <TextField key={index}
-                                label="Frequency Penalty"
-                                variant="outlined"
-                                size="small"
-                                type="number"
-                                fullWidth
-                                value={props.frequency_penalty}
-                                onChange={(e) => {
-                                    const value = Math.min(2, Math.max(-2, Number(e.target.value)));
-                                    props.setFrequencyPenalty(value);
-                                }}
-                                slotProps={{
-                                    htmlInput: {
-                                        min: -2,
-                                        max: 2,
-                                        step: 0.01,
-                                        style: { textAlign: "center" },
-                                    },
-                                    input: {
-                                        startAdornment: (
-                                            <input
-                                                type="range"
-                                                min="-2"
-                                                max="2"
-                                                step="0.01"
-                                                value={props.frequency_penalty}
-                                                onChange={(e) => props.setFrequencyPenalty(Number(e.target.value))}
-                                                style={{ width: "100%" }}
-                                            />
-                                        ),
-                                    },
-                                }}
-                            />
-
-                        )
-                    case "presence_penalty":
-                        return (
-                            <TextField key={index}
-                                label="Presence Penalty"
-                                variant="outlined"
-                                size="small"
-                                type="number"
-                                fullWidth
-                                value={props.presence_penalty}
-                                onChange={(e) => {
-                                    const value = Math.min(2, Math.max(-2, Number(e.target.value)));
-                                    props.setPresencePenalty(value);
-                                }}
-                                slotProps={{
-                                    htmlInput: {
-                                        min: -2,
-                                        max: 2,
-                                        step: 0.01,
-                                        style: { textAlign: "center" },
-                                    },
-                                    input: {
-                                        startAdornment: (
-                                            <input
-                                                type="range"
-                                                min="-2"
-                                                max="2"
-                                                step="0.01"
-                                                value={props.presence_penalty}
-                                                onChange={(e) => props.setPresencePenalty(Number(e.target.value))}
-                                                style={{ width: "100%" }}
-                                            />
-                                        ),
-                                    },
-                                }}
-                            />
-                        )
-                    case "parallel_tool_calls":
-                        return (
-                            <Stack direction="row" alignItems="center" spacing={1} key={index} >
-                                <label>Parallel Tool Calls</label>
-                                <Switch
-                                    checked={props.parallel_tool_calls}
-                                    onChange={(e) => props.setParallelToolCalls(e.target.checked)}
-                                />
-                            </Stack>
-                        )
-
-                    default:
-                        break;
-                }
-            })}
-
             {/* Select many parameters to add into the paramList */}
-            {!simplify &&
-                <FormControl sx={{ marginTop: 4, minWidth: 120 }}>
-                    <InputLabel shrink htmlFor="select-multiple-parameters">
-                        Parameters
-                    </InputLabel>
-                    <Select multiple
-                        labelId="select-multiple-parameters"
-                        variant="standard"
-                        size="small"
-                        fullWidth
-                        value={paramList}
-                        onChange={(e) => setparamList(e.target.value as string[])}
-                        renderValue={(selected) => selected.join(", ")}
-                        MenuProps={{
-                            PaperProps: {
-                                style: {
-                                    zIndex: 1002,
+            <Stack
+                direction="column"
+                spacing={2}
+                sx={{
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
+                    overflowY: "auto",
+                    padding: 2,
+                }}
+            >
+                {!simplify &&
+                    <FormControl sx={{ marginTop: 4, minWidth: 120 }}>
+                        <InputLabel shrink htmlFor="select-multiple-parameters">
+                            Parameters
+                        </InputLabel>
+                        <Select multiple
+                            labelId="select-multiple-parameters"
+                            variant="standard"
+                            size="small"
+                            fullWidth
+                            value={paramList}
+                            onChange={(e) => setparamList((p) => {
+                                const selectedParams = e.target.value as string[];
+                                // sort by the first charactor
+                                const sortedParams = selectedParams.sort((a, b) => {
+                                    if (a < b) return -1;
+                                    if (a > b) return 1;
+                                    return 0;
+                                });
+                                return sortedParams
+                            })}
+                            renderValue={(selected) => selected.join(", ")}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        zIndex: 1002,
+                                    },
                                 },
-                            },
-                        }}
-                    >
-                        <MenuItem value="max_completion_tokens">Max Completion Tokens</MenuItem>
-                        <MenuItem value="temperature">Temperature</MenuItem>
-                        <MenuItem value="top_p">Top P</MenuItem>
-                        <MenuItem value="frequency_penalty">Frequency Penalty</MenuItem>
-                        <MenuItem value="presence_penalty">Presence Penalty</MenuItem>
-                        <MenuItem value="parallel_tool_calls">Parallel Tool Calls</MenuItem>
-                    </Select>
-                </FormControl>
-            }
+                            }}
+                        >
+                            <MenuItem value="frequency_penalty">Frequency Penalty</MenuItem>
+                            <MenuItem value="max_completion_tokens">Max Completion Tokens</MenuItem>
+                            <MenuItem value="presence_penalty">Presence Penalty</MenuItem>
+                            <MenuItem value="stop">Stop</MenuItem>
+                            <MenuItem value="temperature">Temperature</MenuItem>
+                            <MenuItem value="top_p">Top P</MenuItem>
+                        </Select>
+                    </FormControl>
+                }
+
+                <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+
+                {/* Render the selected parameters */}
+                {paramList.map((key, index) => {
+                    switch (key) {
+                        case "max_completion_tokens":
+                            return (
+                                <TextField key={index}
+                                    label="Max Completion Tokens"
+                                    variant="outlined"
+                                    size="small"
+                                    type="number"
+                                    fullWidth
+                                    value={props.max_completion_tokens}
+                                    onChange={(e) => {
+                                        const value = Math.min(4096, Math.max(1, Number(e.target.value)));
+                                        props.setMaxCompletionTokens(value);
+                                    }}
+                                />
+                            );
+                        case "temperature":
+                            return (
+                                <TextField key={index}
+                                    label="Temperature"
+                                    variant="outlined"
+                                    size="small"
+                                    type="number"
+                                    fullWidth
+                                    value={props.temperature}
+                                    onChange={(e) => {
+                                        const value = Math.min(1, Math.max(0, Number(e.target.value)));
+                                        props.setTemperature(value);
+                                    }}
+                                    slotProps={{
+                                        htmlInput: {
+                                            min: 0,
+                                            max: 1,
+                                            step: 0.01,
+                                            style: { textAlign: "center" },
+                                        },
+                                        input: {
+                                            startAdornment: (
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max="1"
+                                                    step="0.01"
+                                                    value={props.temperature}
+                                                    onChange={(e) => props.setTemperature(Number(e.target.value))}
+                                                    style={{ width: "100%" }}
+                                                />
+                                            ),
+                                        },
+                                    }}
+                                />
+                            )
+                        case "top_p":
+                            return (
+                                <TextField key={index}
+                                    label="Top P"
+                                    variant="outlined"
+                                    size="small"
+                                    type="number"
+                                    fullWidth
+                                    value={props.top_p}
+                                    onChange={(e) => {
+                                        const value = Math.min(1, Math.max(0, Number(e.target.value)));
+                                        props.setTopP(value);
+                                    }}
+                                    slotProps={{
+                                        htmlInput: {
+                                            min: 0,
+                                            max: 1,
+                                            step: 0.01,
+                                            style: { textAlign: "center" },
+                                        },
+                                        input: {
+                                            startAdornment: (
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max="1"
+                                                    step="0.01"
+                                                    value={props.top_p}
+                                                    onChange={(e) => props.setTopP(Number(e.target.value))}
+                                                    style={{ width: "100%" }}
+                                                />
+                                            ),
+                                        },
+                                    }}
+                                />
+                            )
+                        case "frequency_penalty":
+                            return (
+                                <TextField key={index}
+                                    label="Frequency Penalty"
+                                    variant="outlined"
+                                    size="small"
+                                    type="number"
+                                    fullWidth
+                                    value={props.frequency_penalty}
+                                    onChange={(e) => {
+                                        const value = Math.min(2, Math.max(-2, Number(e.target.value)));
+                                        props.setFrequencyPenalty(value);
+                                    }}
+                                    slotProps={{
+                                        htmlInput: {
+                                            min: -2,
+                                            max: 2,
+                                            step: 0.01,
+                                            style: { textAlign: "center" },
+                                        },
+                                        input: {
+                                            startAdornment: (
+                                                <input
+                                                    type="range"
+                                                    min="-2"
+                                                    max="2"
+                                                    step="0.01"
+                                                    value={props.frequency_penalty}
+                                                    onChange={(e) => props.setFrequencyPenalty(Number(e.target.value))}
+                                                    style={{ width: "100%" }}
+                                                />
+                                            ),
+                                        },
+                                    }}
+                                />
+
+                            )
+                        case "presence_penalty":
+                            return (
+                                <TextField key={index}
+                                    label="Presence Penalty"
+                                    variant="outlined"
+                                    size="small"
+                                    type="number"
+                                    fullWidth
+                                    value={props.presence_penalty}
+                                    onChange={(e) => {
+                                        const value = Math.min(2, Math.max(-2, Number(e.target.value)));
+                                        props.setPresencePenalty(value);
+                                    }}
+                                    slotProps={{
+                                        htmlInput: {
+                                            min: -2,
+                                            max: 2,
+                                            step: 0.01,
+                                            style: { textAlign: "center" },
+                                        },
+                                        input: {
+                                            startAdornment: (
+                                                <input
+                                                    type="range"
+                                                    min="-2"
+                                                    max="2"
+                                                    step="0.01"
+                                                    value={props.presence_penalty}
+                                                    onChange={(e) => props.setPresencePenalty(Number(e.target.value))}
+                                                    style={{ width: "100%" }}
+                                                />
+                                            ),
+                                        },
+                                    }}
+                                />
+                            )
+                        // case "parallel_tool_calls":
+                        //     return (
+                        //         <Stack direction="row" alignItems="center" spacing={1} key={index} >
+                        //             <label>Parallel Tool Calls</label>
+                        //             <Switch
+                        //                 checked={props.parallel_tool_calls}
+                        //                 onChange={(e) => props.setParallelToolCalls(e.target.checked)}
+                        //             />
+                        //         </Stack>
+                        //     )
+
+                        case "stop":
+                            return (
+                                <TextField key={index}
+                                    label="Stop"
+                                    variant="outlined"
+                                    size="small"
+                                    fullWidth
+                                    value={(props?.stop || []).join(",") || ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value === "") {
+                                            props.setStop(undefined);
+                                        }
+                                        const stopList = value.split(",").map((item) => item.trim());
+                                        props.setStop(stopList);
+                                    }}
+                                    helperText="Separate multiple stop sequences with commas"
+                                />
+                            )
+
+                        default:
+                            break;
+                    }
+                })}
+            </Stack>
         </Stack>
     );
 }
